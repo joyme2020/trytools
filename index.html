@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timestamp Converter - Unix Timestamp to Date & Date to Timestamp | Free Online Tool</title>
+<meta name="description" content="Free online Unix timestamp converter. Convert timestamps to human-readable dates and vice versa. Supports timezone conversion, natural language input, and ISO 8601 formatting. No signup required.">
+<meta name="keywords" content="timestamp converter, unix timestamp, epoch converter, timestamp to date, date to timestamp, timezone converter">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://timestamp-converter.vercel.app/">
+<meta property="og:title" content="Free Online Timestamp Converter">
+<meta property="og:description" content="Convert Unix timestamps to dates and dates to timestamps. Free, fast, no signup.">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Timestamp Converter",
+  "url": "https://timestamp-converter.vercel.app/",
+  "description": "Free online Unix timestamp converter with timezone support and natural language input.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All"
+}
+</script>
+<style>
+:root {
+  --bg: #fafafa;
+  --surface: #fff;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-secondary: #6b7280;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --success: #10b981;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 48px 20px 32px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+}
+
+header h1 {
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 16px;
+  opacity: .85;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Live clock */
+.live-clock {
+  margin-top: -20px;
+  position: relative;
+  z-index: 1;
+}
+
+.clock-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.clock-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 500;
+}
+
+.clock-value {
+  font-family: var(--font-mono);
+  font-size: clamp(20px, 4vw, 32px);
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.clock-copy {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+  white-space: nowrap;
+}
+
+.clock-copy:hover { background: var(--accent-hover); }
+.clock-copy.copied { background: var(--success); }
+
+/* Ad slot */
+.ad-slot {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.ad-placeholder {
+  background: #f3f4f6;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* Converter sections */
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 20px;
+}
+
+.section h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section h2 .icon { font-size: 20px; }
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.input-group input,
+.input-group select {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+}
+
+.input-group input { flex: 1; min-width: 200px; }
+.input-group select { min-width: 140px; }
+
+.btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+  white-space: nowrap;
+}
+
+.btn:hover { background: var(--accent-hover); }
+.btn.copied { background: var(--success); }
+
+.results {
+  margin-top: 20px;
+  display: grid;
+  gap: 10px;
+}
+
+.result-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.result-row .label {
+  color: var(--text-secondary);
+  font-size: 12px;
+  min-width: 100px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  font-weight: 500;
+}
+
+.result-row .value {
+  flex: 1;
+  word-break: break-all;
+  font-weight: 500;
+}
+
+.result-row .copy-btn {
+  background: none;
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all .15s;
+}
+
+.result-row .copy-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.result-row .copy-btn.copied {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+/* Timezone grid */
+.tz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.tz-item {
+  padding: 10px 14px;
+  background: var(--bg);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.tz-item .tz-name { color: var(--text-secondary); }
+.tz-item .tz-time { font-weight: 500; }
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+footer a:hover { text-decoration: underline; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .section { padding: 20px 16px; }
+  .result-row { font-size: 12px; }
+  .result-row .label { min-width: 70px; }
+  .clock-card { flex-direction: column; align-items: stretch; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Unix Timestamp Converter</h1>
+  <p>Convert timestamps to dates and dates to timestamps. Free, instant, no signup.</p>
+</header>
+
+<div class="container">
+
+  <!-- Live Clock -->
+  <div class="live-clock">
+    <div class="clock-card">
+      <div>
+        <div class="clock-label">Current Unix Timestamp</div>
+        <div class="clock-value" id="liveTimestamp">—</div>
+      </div>
+      <button class="clock-copy" id="liveCopyBtn" onclick="copyLive()">Copy</button>
+    </div>
+  </div>
+
+  <!-- Ad Slot Top -->
+  <div class="ad-slot">
+    <div class="ad-placeholder" id="ad-top">
+      <!-- Replace with AdSense code -->
+      ADSENSE_SLOT_TOP
+    </div>
+  </div>
+
+  <!-- Timestamp → Date -->
+  <div class="section">
+    <h2><span class="icon">&#9660;</span> Timestamp to Human-Readable Date</h2>
+    <div class="input-group">
+      <input type="text" id="tsInput" placeholder="e.g. 1715385600 or 1715385600000 or &quot;3 days ago&quot;" autofocus>
+      <select id="tsUnit">
+        <option value="auto">Auto-detect</option>
+        <option value="seconds">Seconds</option>
+        <option value="milliseconds">Milliseconds</option>
+      </select>
+      <select id="tsTz">
+        <option value="local">Local time</option>
+        <option value="UTC">UTC</option>
+        <option value="Asia/Shanghai">Shanghai (CST)</option>
+        <option value="America/New_York">New York (EST)</option>
+        <option value="America/Los_Angeles">Los Angeles (PST)</option>
+        <option value="Europe/London">London (GMT)</option>
+        <option value="Asia/Tokyo">Tokyo (JST)</option>
+        <option value="Asia/Singapore">Singapore (SGT)</option>
+        <option value="Europe/Berlin">Berlin (CET)</option>
+      </select>
+    </div>
+    <div class="results" id="tsResults"></div>
+  </div>
+
+  <!-- Date → Timestamp -->
+  <div class="section">
+    <h2><span class="icon">&#9650;</span> Date to Timestamp</h2>
+    <div class="input-group">
+      <input type="text" id="dateInput" placeholder="e.g. 2024-05-11 14:30 or &quot;next Friday noon&quot;">
+      <select id="dateTz">
+        <option value="local">Local time</option>
+        <option value="UTC">UTC</option>
+        <option value="Asia/Shanghai">Shanghai (CST)</option>
+        <option value="America/New_York">New York (EST)</option>
+        <option value="America/Los_Angeles">Los Angeles (PST)</option>
+        <option value="Europe/London">London (GMT)</option>
+        <option value="Asia/Tokyo">Tokyo (JST)</option>
+        <option value="Asia/Singapore">Singapore (SGT)</option>
+        <option value="Europe/Berlin">Berlin (CET)</option>
+      </select>
+    </div>
+    <div class="results" id="dateResults"></div>
+  </div>
+
+  <!-- Timezone Quick Reference -->
+  <div class="section">
+    <h2><span class="icon">&#127758;</span> Timezone Quick Reference</h2>
+    <div class="tz-grid" id="tzGrid"></div>
+  </div>
+
+  <!-- Ad Slot Bottom -->
+  <div class="ad-slot">
+    <div class="ad-placeholder" id="ad-bottom">
+      <!-- Replace with AdSense code -->
+      ADSENSE_SLOT_BOTTOM
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>All processing happens in your browser. No data is ever uploaded.</p>
+  <p>
+    <a href="https://github.com">Source</a> &middot;
+    <a href="/privacy">Privacy</a> &middot;
+    <a href="/terms">Terms</a>
+  </p>
+</footer>
+
+<script>
+'use strict';
+
+const $ = (sel, ctx) => (ctx || document).querySelector(sel);
+
+// ── Live clock ──────────────────────────────────────────────
+function updateLive() {
+  const now = Date.now();
+  $('#liveTimestamp').textContent = String(Math.floor(now / 1000));
+}
+
+function copyLive() {
+  const btn = $('#liveCopyBtn');
+  const text = $('#liveTimestamp').textContent;
+  if (!navigator.clipboard) { fallbackCopy(btn, text); return; }
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  }).catch(() => { fallbackCopy(btn, text); });
+}
+
+setInterval(updateLive, 1000);
+updateLive();
+
+// ── Natural language date parser ──────────────────────────
+function applyTimeOfDay(d, spec) {
+  if (!spec) return d;
+  const s = spec.trim().toLowerCase();
+  if (s === 'noon') { d.setHours(12,0,0,0); return d; }
+  if (s === 'midnight') { d.setHours(0,0,0,0); return d; }
+  const m = s.match(/^(\d{1,2})(?::(\d{2}))?\s*(am|pm)?$/);
+  if (m) {
+    let h = parseInt(m[1]);
+    if (m[3] === 'pm' && h < 12) h += 12;
+    if (m[3] === 'am' && h === 12) h = 0;
+    d.setHours(h, parseInt(m[2] || '0'), 0, 0);
+  }
+  return d;
+}
+
+const NL_PATTERNS = [
+  [/^now$/i, () => new Date()],
+  [/^today$/i, () => { const d = new Date(); d.setHours(0,0,0,0); return d; }],
+  [/^tomorrow$/i, () => { const d = new Date(); d.setDate(d.getDate()+1); d.setHours(0,0,0,0); return d; }],
+  [/^yesterday$/i, () => { const d = new Date(); d.setDate(d.getDate()-1); d.setHours(0,0,0,0); return d; }],
+
+  // "next Monday", "next Friday at 3pm", "next Monday noon"
+  [/^next\s+(mon|tue|wed|thu|fri|sat|sun)(day)?(?:\s+at\s+(.+))?$/i, (_, day, _d, spec) => {
+    const d = nextDayOfWeek(day);
+    return spec ? applyTimeOfDay(d, spec) : d;
+  }],
+  [/^last\s+(mon|tue|wed|thu|fri|sat|sun)(day)?(?:\s+at\s+(.+))?$/i, (_, day, _d, spec) => {
+    const d = prevDayOfWeek(day);
+    return spec ? applyTimeOfDay(d, spec) : d;
+  }],
+
+  // "3 days ago", "2 hours later", "1 month from now"
+  [/^(\d+)\s*(day|week|month|year|hour|min|minute|sec|second)s?\s+(ago|later|from\s+now)$/i, (_, n, unit, dir) => {
+    const d = new Date();
+    const ms = toMs(parseInt(n), unit.toLowerCase());
+    return new Date(dir === 'ago' ? d.getTime() - ms : d.getTime() + ms);
+  }],
+
+  // Standalone times: "noon", "midnight", "3pm", "14:30"
+  [/^(noon|midnight|\d{1,2}(?::\d{2})?\s*(am|pm)?)$/i, (_, spec) => {
+    return applyTimeOfDay(new Date(), spec);
+  }],
+
+  // "3 days ago at noon", "2 weeks later at 9am"
+  [/^(\d+)\s*(day|week|month|year|hour|min|minute|sec|second)s?\s+(ago|later|from\s+now)\s+at\s+(.+)$/i, (_, n, unit, dir, spec) => {
+    const d = new Date();
+    const ms = toMs(parseInt(n), unit.toLowerCase());
+    const base = new Date(dir === 'ago' ? d.getTime() - ms : d.getTime() + ms);
+    return applyTimeOfDay(base, spec);
+  }],
+
+  // "3 days before 2025-01-01", "1 week after 2025-01-01"
+  [/^(\d+)\s*(day|week|month|year|hour|min|minute|sec|second)s?\s+(before|after)\s+(.+)$/i, (_, n, unit, dir, dateStr) => {
+    const base = parseDateStr(dateStr);
+    if (!base) return null;
+    const ms = toMs(parseInt(n), unit.toLowerCase());
+    return new Date(dir === 'before' ? base.getTime() - ms : base.getTime() + ms);
+  }],
+];
+
+const DAYS = ['sun','mon','tue','wed','thu','fri','sat'];
+
+function nextDayOfWeek(abbr) {
+  const target = DAYS.indexOf(abbr.toLowerCase().slice(0,3));
+  const d = new Date();
+  d.setDate(d.getDate() + ((target + 7 - d.getDay()) % 7 || 7));
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function prevDayOfWeek(abbr) {
+  const target = DAYS.indexOf(abbr.toLowerCase().slice(0,3));
+  const d = new Date();
+  d.setDate(d.getDate() - ((d.getDay() + 7 - target) % 7 || 7));
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function toMs(n, unit) {
+  const m = { second: 1000, sec: 1000, minute: 60000, min: 60000,
+    hour: 3600000, day: 86400000, week: 604800000,
+    month: 2629800000, year: 31557600000 };
+  return n * (m[unit] || 86400000);
+}
+
+function parseDateStr(s) {
+  const d = new Date(s);
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function parseNatural(s) {
+  for (const [re, fn] of NL_PATTERNS) {
+    const m = s.match(re);
+    if (m) {
+      const d = fn(...m);
+      return d && !isNaN(d.getTime()) ? d : null;
+    }
+  }
+  return null;
+}
+
+// ── Formatting helpers ─────────────────────────────────────
+function formatDate(date, tz) {
+  try {
+    return date.toLocaleString('en-US', {
+      timeZone: tz === 'local' ? undefined : tz,
+      weekday: 'short', year: 'numeric', month: 'short', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false
+    });
+  } catch { return 'Invalid timezone'; }
+}
+
+function formatISO(date, tz) {
+  try {
+    const opts = { timeZone: tz === 'local' ? undefined : tz,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+    const parts = new Intl.DateTimeFormat('en-CA', opts).formatToParts(date);
+    const get = (t) => parts.find(p => p.type === t)?.value || '00';
+    return `${get('year')}-${get('month')}-${get('day')}T${get('hour')}:${get('minute')}:${get('second')}`;
+  } catch { return 'Invalid timezone'; }
+}
+
+function formatRFC2822(date) {
+  return date.toUTCString();
+}
+
+// ── Copy helpers ───────────────────────────────────────────
+function fallbackCopy(btn, text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch { /* last resort: do nothing */ }
+  document.body.removeChild(ta);
+  btn.textContent = 'Copied!';
+  btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+}
+
+function copyText(btn, text) {
+  if (!navigator.clipboard) { fallbackCopy(btn, text); return; }
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  }).catch(() => { fallbackCopy(btn, text); });
+}
+
+// ── Timezone offset helper ──────────────────────────────────
+// Given a Date and whether its components are UTC-based (ISO parse) or local,
+// returns the UTC milliseconds for those same wall-clock components interpreted
+// in the target timezone.
+function applyTzOffset(d, isUTC, tz) {
+  const Y  = isUTC ? d.getUTCFullYear() : d.getFullYear();
+  const M  = isUTC ? d.getUTCMonth()    : d.getMonth();
+  const D  = isUTC ? d.getUTCDate()     : d.getDate();
+  const h  = isUTC ? d.getUTCHours()    : d.getHours();
+  const min = isUTC ? d.getUTCMinutes() : d.getMinutes();
+  const s  = isUTC ? d.getUTCSeconds()  : d.getSeconds();
+
+  // Use noon on the target date to query DST offset, avoiding 2 AM ambiguity.
+  const noonUTC = Date.UTC(Y, M, D, 12, 0, 0);
+  const offsetParts = Intl.DateTimeFormat('en-CA', {
+    timeZone: tz,
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+    hour12: false, timeZoneName: 'shortOffset'
+  }).formatToParts(new Date(noonUTC));
+  const offsetStr = offsetParts.find(p => p.type === 'timeZoneName')?.value || '';
+  const m = offsetStr.match(/^(?:GMT|UTC)?([+-]\d{1,2}):?(\d{2})?$/);
+
+  if (m) {
+    const sign = parseInt(m[1]);
+    const mins = parseInt(m[2] || '0');
+    const offsetMs = (Math.abs(sign) * 60 + mins) * (sign < 0 ? -60000 : 60000);
+    return Date.UTC(Y, M, D, h, min, s) - offsetMs;
+  }
+  // Fallback: return original ms (UTC display still shows the correct absolute moment)
+  return d.getTime();
+}
+
+// ── Timestamp → Date ───────────────────────────────────────
+function convertTimestamp() {
+  const raw = $('#tsInput').value.trim();
+  const unit = $('#tsUnit').value;
+  const tz = $('#tsTz').value;
+  const container = $('#tsResults');
+  container.innerHTML = '';
+
+  if (!raw) {
+    showTsResults(Date.now(), tz, container);
+    return;
+  }
+
+  // Try natural language
+  const nl = parseNatural(raw);
+  if (nl) {
+    showTsResults(nl.getTime(), tz, container);
+    return;
+  }
+
+  // Try numeric timestamp
+  // Strip thousands separators: commas, underscores, spaces, and dots that appear as group separators
+  let num = raw.replace(/[\s,_]/g, '');
+  // Only strip dots if there are multiple (thousands separator pattern, not decimal)
+  if ((num.match(/\./g) || []).length > 1) {
+    num = num.replace(/\./g, '');
+  }
+  if (/^-?\d+$/.test(num)) {
+    let ms = parseInt(num);
+    if (unit === 'seconds' || (unit === 'auto' && ms < 100000000000)) {
+      ms *= 1000;
+    }
+    if (ms < -8640000000000000 || ms > 8640000000000000) {
+      container.innerHTML = '<div class="result-row"><span class="label">Error</span><span class="value">Timestamp out of valid range</span></div>';
+      return;
+    }
+    showTsResults(ms, tz, container);
+    return;
+  }
+
+  // Try as date string
+  const d = new Date(raw);
+  if (!isNaN(d.getTime())) {
+    showTsResults(d.getTime(), tz, container);
+  } else {
+    container.innerHTML = '<div class="result-row"><span class="label">Error</span><span class="value">Unable to parse input. Try a Unix timestamp (e.g. 1715385600), ISO date (2024-05-11), or natural language (&quot;3 days ago&quot;)</span></div>';
+  }
+}
+
+function showTsResults(ms, tz, container) {
+  const d = new Date(ms);
+  const rows = [
+    ['Unix (seconds)', String(Math.floor(ms / 1000))],
+    ['Unix (milliseconds)', String(ms)],
+    ['ISO 8601', formatISO(d, tz)],
+    ['Formatted', formatDate(d, tz)],
+    ['RFC 2822', formatRFC2822(d)],
+    ['UTC', d.toISOString()],
+  ];
+  container.innerHTML = rows.map(([label, value]) =>
+    `<div class="result-row">
+      <span class="label">${label}</span>
+      <span class="value">${value}</span>
+      <button class="copy-btn" onclick="copyText(this,'${value.replace(/'/g,"\\'")}')">Copy</button>
+    </div>`
+  ).join('');
+}
+
+// ── Date → Timestamp ───────────────────────────────────────
+function convertDate() {
+  const raw = $('#dateInput').value.trim();
+  const tz = $('#dateTz').value;
+  const container = $('#dateResults');
+  container.innerHTML = '';
+
+  if (!raw) {
+    container.innerHTML = '<div class="result-row"><span class="label">Ready</span><span class="value">Enter a date or natural language expression above</span></div>';
+    return;
+  }
+
+  // Try natural language — produces an absolute Date in local time.
+  // When a target timezone is selected, reinterpret the local wall-clock
+  // components as belonging to the target timezone.
+  const nl = parseNatural(raw);
+  if (nl) {
+    let ms = nl.getTime();
+    if (tz !== 'local') {
+      ms = applyTzOffset(nl, false, tz);
+    }
+    showDateResults(ms, container);
+    return;
+  }
+
+  // Try as date string.
+  // Strip ISO timezone suffix (Z, ±HH:MM, ±HHMM) so the wall-clock digits
+  // are parsed as-is, letting our timezone selector control interpretation.
+  const cleaned = raw.trim().replace(/[Zz]\s*$|([+-]\d{2}):?(\d{2})?\s*$/,'');
+  let d = new Date(cleaned);
+  if (isNaN(d.getTime())) {
+    container.innerHTML = '<div class="result-row"><span class="label">Error</span><span class="value">Unable to parse input. Try ISO format (2024-05-11T14:30) or natural language (&quot;next Friday noon&quot;)</span></div>';
+    return;
+  }
+
+  // Adjust for target timezone: interpret the user's input as wall-clock time in the selected tz
+  if (tz !== 'local') {
+    // Date-only ISO (e.g. "2024-05-11") and ISO with T are parsed as UTC; everything else local.
+    const isISOParsed = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}|$)/.test(raw.trim());
+    d = new Date(applyTzOffset(d, isISOParsed, tz));
+  }
+
+  showDateResults(d.getTime(), container);
+}
+
+function showDateResults(ms, container) {
+  const rows = [
+    ['Unix (seconds)', String(Math.floor(ms / 1000))],
+    ['Unix (milliseconds)', String(ms)],
+    ['UTC', new Date(ms).toISOString()],
+  ];
+  container.innerHTML = rows.map(([label, value]) =>
+    `<div class="result-row">
+      <span class="label">${label}</span>
+      <span class="value">${value}</span>
+      <button class="copy-btn" onclick="copyText(this,'${value.replace(/'/g,"\\'")}')">Copy</button>
+    </div>`
+  ).join('');
+}
+
+// ── Timezone grid ───────────────────────────────────────────
+const TZ_LIST = [
+  ['UTC', 'Etc/UTC'],
+  ['Los Angeles (PST)', 'America/Los_Angeles'],
+  ['New York (EST)', 'America/New_York'],
+  ['London (GMT)', 'Europe/London'],
+  ['Berlin (CET)', 'Europe/Berlin'],
+  ['Shanghai (CST)', 'Asia/Shanghai'],
+  ['Tokyo (JST)', 'Asia/Tokyo'],
+  ['Singapore (SGT)', 'Asia/Singapore'],
+  ['Sydney (AEDT)', 'Australia/Sydney'],
+  ['São Paulo (BRT)', 'America/Sao_Paulo'],
+  ['Dubai (GST)', 'Asia/Dubai'],
+  ['Mumbai (IST)', 'Asia/Kolkata'],
+];
+
+function updateTzGrid() {
+  const now = new Date();
+  $('#tzGrid').innerHTML = TZ_LIST.map(([name, tz]) => {
+    const time = now.toLocaleTimeString('en-US', { timeZone: tz, hour: '2-digit', minute: '2-digit', hour12: false });
+    return `<div class="tz-item"><span class="tz-name">${name}</span><span class="tz-time">${time}</span></div>`;
+  }).join('');
+}
+
+setInterval(updateTzGrid, 10000);
+updateTzGrid();
+
+// ── Event listeners ────────────────────────────────────────
+let tsTimer, dateTimer;
+$('#tsInput').addEventListener('input', () => { clearTimeout(tsTimer); tsTimer = setTimeout(convertTimestamp, 300); });
+$('#tsUnit').addEventListener('change', convertTimestamp);
+$('#tsTz').addEventListener('change', convertTimestamp);
+$('#dateInput').addEventListener('input', () => { clearTimeout(dateTimer); dateTimer = setTimeout(convertDate, 300); });
+$('#dateTz').addEventListener('change', convertDate);
+
+// ── URL parameter support ──────────────────────────────────
+(function() {
+  const params = new URLSearchParams(location.search);
+  const ts = params.get('ts');
+  if (ts) {
+    $('#tsInput').value = ts;
+    convertTimestamp();
+  }
+})();
+
+// ── Keyboard shortcut: Ctrl+K to focus input ───────────────
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    $('#tsInput').focus();
+  }
+});
+// ── Initialize ────────────────────────────────────────────
+convertTimestamp();
+convertDate();
+</script>
+
+</body>
+</html>
