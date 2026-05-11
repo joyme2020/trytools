@@ -439,6 +439,40 @@ footer a:hover { text-decoration: underline; }
     <div class="ad-placeholder" id="ad-middle">ADSENSE_SLOT_MIDDLE</div>
   </div>
 
+  <!-- WCAG Contrast Checker -->
+  <div class="section" id="contrastSection">
+    <h2>WCAG Contrast Checker</h2>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">Check if your text and background colors meet accessibility standards.</p>
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:end;">
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;">TEXT COLOR</div>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <input type="color" id="fgColor" value="#ffffff" onchange="fgFromPicker(this.value)" style="width:36px;height:36px;border:1px solid var(--border);border-radius:6px;cursor:pointer;padding:2px;">
+          <input type="text" id="fgText" value="#ffffff" placeholder="#ffffff" oninput="fgFromText(this.value)" style="width:90px;font-family:var(--font-mono);font-size:13px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;outline:none;background:var(--bg);color:var(--text);">
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--text-secondary);margin-bottom:4px;">BACKGROUND</div>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <input type="color" id="bgColor" value="#6366f1" onchange="bgFromPicker(this.value)" style="width:36px;height:36px;border:1px solid var(--border);border-radius:6px;cursor:pointer;padding:2px;">
+          <input type="text" id="bgText" value="#6366f1" placeholder="#6366f1" oninput="bgFromText(this.value)" style="width:90px;font-family:var(--font-mono);font-size:13px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;outline:none;background:var(--bg);color:var(--text);">
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:16px; display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+      <div id="contrastPreview" style="padding:24px 40px; border-radius:8px; text-align:center; min-width:200px;">
+        <span style="font-size:20px; font-weight:600;" id="previewLarge">Large Text</span>
+        <br>
+        <span style="font-size:13px;" id="previewNormal">Normal text sample for contrast testing</span>
+      </div>
+      <div>
+        <div style="font-size:24px;font-weight:700;" id="contrastRatio">--</div>
+        <div style="font-size:12px;color:var(--text-secondary);">Contrast Ratio</div>
+        <div id="wcagResults" style="margin-top:12px;display:grid;gap:6px;"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- SEO Content -->
   <div class="section">
     <h2>How to Use This Color Converter</h2>
@@ -746,10 +780,61 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// ── Contrast Checker ──────────────────────────────────────
+function getLuminance(r, g, b) {
+  const [rs, gs, bs] = [r,g,b].map(c => {
+    c /= 255;
+    return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+}
+
+function getContrast(r1,g1,b1, r2,g2,b2) {
+  const l1 = getLuminance(r1,g1,b1), l2 = getLuminance(r2,g2,b2);
+  return (Math.max(l1,l2) + 0.05) / (Math.min(l1,l2) + 0.05);
+}
+
+function updateContrast() {
+  const fg = parseColor($('#fgText').value);
+  const bg = parseColor($('#bgText').value);
+  if (!fg || !bg) { $('#contrastRatio').textContent = '--'; $('#wcagResults').innerHTML = ''; return; }
+  const ratio = getContrast(fg.r,fg.g,fg.b, bg.r,bg.g,bg.b);
+  $('#contrastRatio').textContent = ratio.toFixed(2) + ':1';
+
+  const preview = $('#contrastPreview');
+  preview.style.backgroundColor = fg.a < 1 ? `rgba(${bg.r},${bg.g},${bg.b},${bg.a})` : rgbToHex(bg.r,bg.g,bg.b);
+  preview.style.color = fg.a < 1 ? `rgba(${fg.r},${fg.g},${fg.b},${fg.a})` : rgbToHex(fg.r,fg.g,fg.b);
+
+  const checks = [
+    ['AA Normal', ratio >= 4.5, '≥ 4.5:1'],
+    ['AA Large', ratio >= 3, '≥ 3:1'],
+    ['AAA Normal', ratio >= 7, '≥ 7:1'],
+    ['AAA Large', ratio >= 4.5, '≥ 4.5:1']
+  ];
+  $('#wcagResults').innerHTML = checks.map(([label, pass, req]) =>
+    `<div style="display:flex;align-items:center;gap:8px;font-size:13px;">
+      <span style="color:${pass?'var(--success)':'var(--error)'};font-weight:600;">${pass?'✓ PASS':'✗ FAIL'}</span>
+      <span>${label}</span>
+      <span style="color:var(--text-secondary);">${req}</span>
+    </div>`
+  ).join('');
+
+  // Sync pickers
+  $('#fgColor').value = rgbToHex(fg.r, fg.g, fg.b);
+  $('#bgColor').value = rgbToHex(bg.r, bg.g, bg.b);
+}
+
+function fgFromPicker(v) { $('#fgText').value = v; updateContrast(); }
+function bgFromPicker(v) { $('#bgText').value = v; updateContrast(); }
+let _contrastTimer;
+function fgFromText(v) { clearTimeout(_contrastTimer); _contrastTimer = setTimeout(()=>{ $('#fgColor').value=v; updateContrast(); },300); }
+function bgFromText(v) { clearTimeout(_contrastTimer); _contrastTimer = setTimeout(()=>{ $('#bgColor').value=v; updateContrast(); },300); }
+
 // ── Demo ───────────────────────────────────────────────────
 (function() {
   $('#colorInput').value = '#6366f1';
   doConvert();
+  updateContrast();
 })();
 
 

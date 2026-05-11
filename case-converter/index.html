@@ -436,6 +436,21 @@ footer a:hover { text-decoration: underline; }
         <span class="result-text" id="rAlt"></span>
         <button class="result-copy" onclick="copyResult('rAlt', this)">Copy</button>
       </div>
+      <div class="result-item">
+        <span class="result-label">camelCase</span>
+        <span class="result-text" id="rCamel"></span>
+        <button class="result-copy" onclick="copyResult('rCamel', this)">Copy</button>
+      </div>
+      <div class="result-item">
+        <span class="result-label">snake_case</span>
+        <span class="result-text" id="rSnake"></span>
+        <button class="result-copy" onclick="copyResult('rSnake', this)">Copy</button>
+      </div>
+      <div class="result-item">
+        <span class="result-label">kebab-case</span>
+        <span class="result-text" id="rKebab"></span>
+        <button class="result-copy" onclick="copyResult('rKebab', this)">Copy</button>
+      </div>
     </div>
   </div>
 
@@ -449,7 +464,7 @@ footer a:hover { text-decoration: underline; }
     <h2>How to Use This Case Converter</h2>
     <ol>
       <li><strong>Type or paste your text</strong> — Enter any text in the input box. No character limit.</li>
-      <li><strong>View all transformations</strong> — Results update in real-time as you type. See all seven transformations at once: UPPERCASE, lowercase, Title Case, Sentence case, Capitalized Case, tOGGLE cASE, and aLtErNaTiNg cAsE.</li>
+      <li><strong>View all transformations</strong> — 10 transformations at once: UPPERCASE, lowercase, Title Case, Sentence case, Capitalized Case, tOGGLE cASE, aLtErNaTiNg cAsE, camelCase, snake_case, and kebab-case.</li>
       <li><strong>Copy the result you need</strong> — Each transformation has its own Copy button. Click to copy that specific version to your clipboard.</li>
       <li><strong>Clear and start over</strong> — Click Clear to reset the input and all outputs.</li>
     </ol>
@@ -459,8 +474,8 @@ footer a:hover { text-decoration: underline; }
     <h2>Why Use This Case Converter?</h2>
     <div style="display:grid; gap:16px; margin-top:8px;">
       <div>
-        <h3>All seven transformations at once</h3>
-        <p>Most case converters make you pick one transformation at a time. This tool shows all seven simultaneously in real-time — compare them side by side and copy the one you need.</p>
+        <h3>All 10 transformations at once</h3>
+        <p>Most case converters make you pick one transformation at a time. This tool shows all 10 simultaneously — including camelCase, snake_case, and kebab-case for code formatting. Compare them side by side and copy the one you need.</p>
       </div>
       <div>
         <h3>Complete privacy</h3>
@@ -573,6 +588,20 @@ function toAlternatingCase(s) {
   return result;
 }
 
+function toCamelCase(s) {
+  // Lowercase everything, then capitalize first letter of each word, then lower first char
+  const words = s.toLowerCase().split(/[\s_\-]+/).filter(w => w);
+  return words.map((w, i) => i === 0 ? w : w.charAt(0).toUpperCase() + w.slice(1)).join('');
+}
+
+function toSnakeCase(s) {
+  return s.toLowerCase().replace(/[\s\-]+/g, '_').replace(/[^a-z0-9_]/g, '');
+}
+
+function toKebabCase(s) {
+  return s.toLowerCase().replace(/[\s_]+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
 // ── Render ─────────────────────────────────────────────────
 function updateAll() {
   const text = $('#textInput').value;
@@ -582,7 +611,7 @@ function updateAll() {
   $('#inputStats').textContent = `${lines} lines · ${text.length} chars`;
 
   if (!text.trim()) {
-    ['Upper','Lower','Title','Sentence','Cap','Toggle','Alt'].forEach(id => {
+    ['Upper','Lower','Title','Sentence','Cap','Toggle','Alt','Camel','Snake','Kebab'].forEach(id => {
       $('#r' + id).textContent = '';
     });
     return;
@@ -595,6 +624,9 @@ function updateAll() {
   $('#rCap').textContent = toCapitalizedCase(text.toLowerCase());
   $('#rToggle').textContent = toToggleCase(text);
   $('#rAlt').textContent = toAlternatingCase(text);
+  $('#rCamel').textContent = toCamelCase(text);
+  $('#rSnake').textContent = toSnakeCase(text);
+  $('#rKebab').textContent = toKebabCase(text);
 }
 
 // ── Copy ───────────────────────────────────────────────────

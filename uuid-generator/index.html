@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UUID Generator - Generate UUID v4 Online in Bulk | Free Tool</title>
-<meta name="description" content="Free online UUID v4 generator. Generate random UUIDs individually or in bulk (up to 100 at once). Options for uppercase, lowercase, and hyphen format. All generation in your browser — no data sent to any server.">
-<meta name="keywords" content="uuid generator, uuid v4, generate uuid, random uuid, bulk uuid generator, guid generator, unique identifier, uuid online">
+<title>UUID Generator - v4 and v7 UUIDs Online in Bulk | Free Tool</title>
+<meta name="description" content="Free online UUID generator with v4 (random) and v7 (time-sorted) support. Generate in bulk up to 100, choose uppercase/lowercase, with or without hyphens. All generation in your browser.">
+<meta name="keywords" content="uuid generator, uuid v4, uuid v7, generate uuid, random uuid, time-sorted uuid, bulk uuid generator, guid generator">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://trytools.app/uuid-generator/">
 <meta property="og:title" content="Free Online UUID Generator — Generate UUID v4 in Bulk">
@@ -450,13 +450,18 @@ footer a:hover { text-decoration: underline; }
         <button class="toggle-btn active" data-v="yes">with hyphens</button>
         <button class="toggle-btn" data-v="no">no hyphens</button>
       </div>
+      <span class="control-label">Version:</span>
+      <div class="toggle-group" id="versionToggle">
+        <button class="toggle-btn active" data-v="4">v4 (random)</button>
+        <button class="toggle-btn" data-v="7">v7 (time-sorted)</button>
+      </div>
       <button class="btn primary" onclick="doGenerate()" style="margin-left:auto;">&#x1F504; Generate</button>
     </div>
 
     <noscript>
       <div style="margin-top:14px;padding:14px;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;font-size:14px;color:#92400e;font-family:sans-serif;">
         <strong>UUID Generator — Free Online Tool</strong><br>
-        This tool generates random UUID v4 identifiers using your browser's cryptographically secure random number generator.
+        This tool generates UUIDs (v4 random or v7 time-sorted) using your browser's cryptographically secure random number generator.
         Supports bulk generation (1–100), uppercase/lowercase, and with/without hyphens formats.
         All generation happens in your browser — no data is ever sent to any server.
         Enable JavaScript to use the interactive tool.
@@ -489,7 +494,7 @@ footer a:hover { text-decoration: underline; }
     <ol>
       <li><strong>Select quantity</strong> — Choose how many UUIDs to generate: 1, 5, 10, 25, 50, or 100 at a time.</li>
       <li><strong>Pick format options</strong> — Choose lowercase (standard) or uppercase, and with hyphens (<code>550e8400-e29b-41d4-a716-446655440000</code>) or without (<code>550e8400e29b41d4a716446655440000</code>).</li>
-      <li><strong>Click Generate</strong> — Fresh UUID v4 identifiers are created instantly using your browser's <code>crypto.randomUUID()</code> API. No page reload, no server call.</li>
+      <li><strong>Click Generate</strong> — Fresh UUIDs are created instantly: v4 (fully random) or v7 (time-sorted with millisecond timestamp prefix). No page reload, no server call.</li>
       <li><strong>Copy results</strong> — Click the Copy button next to any UUID to copy it individually, or use <strong>Copy All</strong> to copy the entire batch at once.</li>
     </ol>
   </div>
@@ -570,22 +575,40 @@ const $$ = (sel) => document.querySelectorAll(sel);
 let quantity = 5;
 let upperCase = false;
 let noHyphens = false;
+let uuidVersion = '4';
 
-// ── UUID v4 generation ─────────────────────────────────────
+// ── UUID generation ───────────────────────────────────────
 function generateUUID() {
-  // Prefer native crypto.randomUUID()
+  if (uuidVersion === '7') return generateUUIDv7();
+  // Prefer native crypto.randomUUID() for v4
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();
   }
-  // Fallback: crypto.getRandomValues
   return generateUUIDv4Fallback();
 }
 
 function generateUUIDv4Fallback() {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
-  // Set version 4 (0100)
   bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20,32)}`;
+}
+
+function generateUUIDv7() {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  const ms = Date.now();
+  // First 48 bits: Unix timestamp in milliseconds (big-endian)
+  bytes[0] = (ms / 0x10000000000) & 0xff;
+  bytes[1] = (ms / 0x100000000) & 0xff;
+  bytes[2] = (ms / 0x1000000) & 0xff;
+  bytes[3] = (ms / 0x10000) & 0xff;
+  bytes[4] = (ms / 0x100) & 0xff;
+  bytes[5] = ms & 0xff;
+  // Set version 7 (0111)
+  bytes[6] = (bytes[6] & 0x0f) | 0x70;
   // Set variant (10xx)
   bytes[8] = (bytes[8] & 0x3f) | 0x80;
   const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
@@ -684,6 +707,16 @@ $$('#caseToggle .toggle-btn').forEach(btn => {
     $$('#caseToggle .toggle-btn').forEach(b => b.classList.remove('active'));
     this.classList.add('active');
     upperCase = this.getAttribute('data-v') === 'upper';
+    doGenerate();
+  });
+});
+
+// Version toggle
+$$('#versionToggle .toggle-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    $$('#versionToggle .toggle-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    uuidVersion = this.getAttribute('data-v');
     doGenerate();
   });
 });
