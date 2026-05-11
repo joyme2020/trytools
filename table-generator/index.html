@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Table Generator - Markdown, HTML, MediaWiki Table Maker Online | Free Tool</title>
+<meta name="description" content="Free online table generator. Create tables visually and export to Markdown, HTML, or MediaWiki format. Paste CSV, inline editing, keyboard navigation, and real-time preview.">
+<meta name="keywords" content="table generator, markdown table, html table generator, mediawiki table, table maker, csv to table, wiki table generator">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://trytools.app/table-generator/">
+<meta property="og:title" content="Free Online Table Generator — Markdown, HTML, MediaWiki">
+<meta property="og:description" content="Create tables visually. Export to Markdown, HTML, or MediaWiki. Paste CSV, inline edit, keyboard nav. Free, no signup.">
+<meta property="og:url" content="https://trytools.app/table-generator/">
+<meta property="og:site_name" content="TryTools">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free Online Table Generator — Markdown, HTML, MediaWiki">
+<meta name="twitter:description" content="Create tables visually. Export to Markdown, HTML, or MediaWiki. Paste CSV, inline edit, keyboard nav.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Table Generator",
+  "url": "https://trytools.app/table-generator/",
+  "description": "Free online table generator supporting Markdown, HTML, and MediaWiki formats. All processing happens in your browser.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://trytools.app/"},
+    {"@type": "ListItem", "position": 2, "name": "Table Generator", "item": "https://trytools.app/table-generator/"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Generate Tables",
+  "step": [
+    {"@type": "HowToStep", "position": 1, "text": "Click cells to edit inline, or paste CSV/TSV data directly into the grid."},
+    {"@type": "HowToStep", "position": 2, "text": "Use the +/- buttons to add or remove rows and columns. Click column headers to cycle alignment (left, center, right)."},
+    {"@type": "HowToStep", "position": 3, "text": "Select your output format: Markdown (for GitHub, Reddit), HTML (for websites), or MediaWiki (for Wikipedia)."},
+    {"@type": "HowToStep", "position": 4, "text": "Copy the generated table code from the preview panel. All changes update in real-time."}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What table formats does this generator support?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "This tool generates tables in three formats: Markdown (used on GitHub, Stack Overflow, Reddit, and most static site generators), HTML (standard web tables with optional inline styles), and MediaWiki (used on Wikipedia and other MediaWiki-powered wikis). Switch between formats using the tabs above the preview."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I paste data from Excel or Google Sheets?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Copy cells from Excel or Google Sheets and paste them into the grid. The tool auto-detects tab-separated data (from spreadsheets) and comma-separated data (CSV), and fills the grid automatically. You can also paste an existing Markdown, HTML, or MediaWiki table to parse it back into the editor."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my data safe?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All editing happens in your browser. Table data is auto-saved to your browser's local storage (not any server), so refreshing the page restores your work. No data is ever uploaded."
+      }
+    }
+  ]
+}
+</script>
+<style>
+:root {
+  --bg: #fafafa; --surface: #fff; --border: #e5e7eb;
+  --text: #1f2937; --text-secondary: #6b7280;
+  --accent: #6366f1; --accent-hover: #4f46e5; --success: #10b981;
+  --radius: 12px; --shadow: 0 1px 3px rgba(0,0,0,.06);
+  --font-mono: 'SF Mono','Fira Code','Cascadia Code','Consolas',monospace;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; min-height:100vh; }
+header { text-align:center; padding:48px 20px 32px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:#fff; }
+header h1 { font-size:clamp(24px,5vw,36px); font-weight:700; letter-spacing:-.02em; margin-bottom:8px; }
+header p { font-size:16px; opacity:.85; max-width:480px; margin:0 auto; }
+.container { max-width:1100px; margin:0 auto; padding:0 20px; }
+.breadcrumb { padding:12px 20px; font-size:14px; background:var(--bg); border-bottom:1px solid var(--border); }
+.breadcrumb a { color:var(--accent); text-decoration:none; }
+.breadcrumb a:hover { text-decoration:underline; }
+.breadcrumb span { color:var(--text-secondary); }
+
+.btn { background:var(--surface); color:var(--text); border:1px solid var(--border); padding:6px 14px; border-radius:6px; font-size:13px; font-weight:500; cursor:pointer; transition:all .15s; white-space:nowrap; display:inline-flex; align-items:center; gap:4px; }
+.btn:hover { border-color:var(--accent); color:var(--accent); }
+.btn.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+.btn.primary:hover { background:var(--accent-hover); }
+.btn.success { background:var(--success); color:#fff; border-color:var(--success); }
+
+/* Main section */
+.main-section { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px; margin:24px 0 20px; }
+
+/* Controls */
+.controls { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px; }
+.controls .sep { width:1px; height:20px; background:var(--border); }
+.controls .label { font-size:12px; color:var(--text-secondary); font-weight:500; }
+
+/* Format toolbar */
+.fmt-bar { display:flex; gap:4px; flex-wrap:wrap; align-items:center; margin-bottom:12px; padding:8px 12px; background:var(--bg); border-radius:8px; border:1px solid var(--border); }
+.fmt-bar .btn { padding:4px 10px; font-size:12px; }
+.fmt-bar .btn.active-fmt { background:var(--accent); color:#fff; border-color:var(--accent); }
+.fmt-bar input[type=color] { width:28px; height:28px; border:1px solid var(--border); border-radius:4px; cursor:pointer; padding:1px; background:var(--surface); }
+.fmt-bar .color-wrap { position:relative; display:inline-flex; align-items:center; }
+
+/* Table grid */
+.table-wrap { overflow-x:auto; margin-bottom:12px; max-height:500px; overflow-y:auto; border:1px solid var(--border); border-radius:8px; }
+.table-wrap table { border-collapse:collapse; width:max-content; min-width:100%; }
+.table-wrap th, .table-wrap td { border:1px solid var(--border); padding:6px 10px; min-width:90px; max-width:300px; font-size:13px; font-family:var(--font-mono); position:relative; }
+.table-wrap th { background:#f1f5f9; font-weight:500; cursor:pointer; user-select:none; font-size:12px; color:var(--text-secondary); }
+.table-wrap th:hover { background:#e2e8f0; }
+.table-wrap td { background:var(--surface); cursor:text; }
+.table-wrap td:focus { outline:2px solid var(--accent); outline-offset:-2px; background:#eef2ff; }
+.table-wrap td.selected, .table-wrap th.selected { background:#dbeafe !important; }
+.table-wrap td:empty::before { content:'cell'; color:#d1d5db; }
+.table-wrap th[data-align="center"], .table-wrap td[data-align="center"] { text-align:center; }
+.table-wrap th[data-align="right"], .table-wrap td[data-align="right"] { text-align:right; }
+
+/* Format tabs */
+.fmt-tabs { display:flex; gap:0; margin-bottom:12px; }
+.fmt-tab { padding:8px 20px; font-size:13px; font-weight:500; border:1px solid var(--border); background:var(--bg); color:var(--text-secondary); cursor:pointer; transition:all .15s; }
+.fmt-tab:first-child { border-radius:8px 0 0 8px; }
+.fmt-tab:last-child { border-radius:0 8px 8px 0; }
+.fmt-tab+.fmt-tab { margin-left:-1px; }
+.fmt-tab:hover { color:var(--text); }
+.fmt-tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+
+/* Output */
+.output-area { font-family:var(--font-mono); font-size:13px; line-height:1.5; padding:14px; border:1px solid var(--border); border-radius:8px; background:#f8f9fb; white-space:pre-wrap; word-break:break-all; max-height:300px; overflow-y:auto; min-height:60px; color:var(--text); }
+
+/* Context menu */
+.ctx-menu { position:fixed; background:var(--surface); border:1px solid var(--border); border-radius:8px; box-shadow:0 4px 12px rgba(0,0,0,.12); z-index:999; display:none; min-width:180px; padding:4px 0; }
+.ctx-menu button { display:block; width:100%; text-align:left; padding:8px 16px; font-size:13px; border:none; background:none; cursor:pointer; color:var(--text); }
+.ctx-menu button:hover { background:#f1f5f9; }
+.ctx-menu .sep { height:1px; background:var(--border); margin:4px 0; }
+
+/* Stats bar */
+.stats-bar { display:flex; gap:12px; align-items:center; font-size:12px; color:var(--text-secondary); margin-top:8px; }
+
+/* Ad slot */
+.ad-slot { text-align:center; padding:24px 0; }
+.ad-placeholder { background:#f3f4f6; border:1px dashed var(--border); border-radius:var(--radius); min-height:90px; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); font-size:13px; }
+
+/* SEO sections */
+.section { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); padding:28px; margin-bottom:20px; }
+.section h2 { font-size:18px; font-weight:600; margin-bottom:12px; }
+.section h3 { font-size:15px; font-weight:600; margin-bottom:6px; }
+.section p,.section li { color:var(--text-secondary); font-size:14px; line-height:1.7; }
+.section ol,.section ul { padding-left:20px; display:grid; gap:6px; }
+.section code { background:#f1f5f9; padding:2px 6px; border-radius:4px; font-family:var(--font-mono); font-size:13px; }
+
+.more-tools-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-top:12px; }
+.more-tools-grid a,.more-tools-grid span { padding:12px; background:var(--bg); border-radius:8px; text-decoration:none; color:var(--text); font-weight:500; font-size:14px; }
+.more-tools-grid span { color:var(--text-secondary); }
+footer { text-align:center; padding:40px 20px; color:var(--text-secondary); font-size:13px; }
+footer a { color:var(--accent); text-decoration:none; }
+footer a:hover { text-decoration:underline; }
+
+@media (max-width:600px) {
+  .main-section { padding:12px; }
+  .section { padding:20px 16px; }
+  .controls { gap:4px; }
+  .controls .btn { padding:4px 10px; font-size:12px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="https://trytools.app/">Home</a> <span>&rsaquo;</span> Table Generator
+</nav>
+
+<header>
+  <h1>Table Generator</h1>
+  <p>Create tables visually. Export to Markdown, HTML, or MediaWiki. Paste CSV, edit inline, keyboard nav.</p>
+</header>
+
+<main>
+<div class="container">
+
+  <div class="ad-slot"><div class="ad-placeholder" id="ad-top">ADSENSE_SLOT_TOP</div></div>
+
+  <div class="main-section">
+    <!-- Controls -->
+    <div class="controls" id="controls">
+      <span class="label">Rows:</span>
+      <button class="btn" onclick="addRow()" title="Add row">+</button>
+      <button class="btn" onclick="removeRow()" title="Remove row">−</button>
+      <span class="sep"></span>
+      <span class="label">Cols:</span>
+      <button class="btn" onclick="addCol()" title="Add column">+</button>
+      <button class="btn" onclick="removeCol()" title="Remove column">−</button>
+      <span class="sep"></span>
+      <button class="btn" id="headerBtn" onclick="toggleHeader()">Head Row: Off</button>
+      <span class="sep"></span>
+      <button class="btn" onclick="clearTable()">Clear</button>
+      <button class="btn" onclick="undo()" title="Undo (Ctrl+Z)">↩</button>
+      <span style="font-size:11px;color:var(--text-secondary);margin-left:auto;">Click cells to edit · Tab to next · Paste CSV</span>
+    </div>
+
+    <!-- Formatting toolbar -->
+    <div class="fmt-bar" id="fmtBar">
+      <button class="btn" onclick="toggleBold()" title="Bold (Ctrl+B)"><b>B</b></button>
+      <button class="btn" onclick="toggleItalic()" title="Italic (Ctrl+I)"><i>I</i></button>
+      <span class="sep"></span>
+      <span class="color-wrap"><span style="font-size:11px;color:var(--text-secondary);">Text</span><input type="color" id="textColor" value="#000000" onchange="applyTextColor(this.value)" title="Text color"></span>
+      <span class="color-wrap"><span style="font-size:11px;color:var(--text-secondary);">Bg</span><input type="color" id="bgColor" value="#ffff00" onchange="applyBgColor(this.value)" title="Background color"></span>
+      <span class="sep"></span>
+      <button class="btn" onclick="clearFormat()" title="Clear formatting">Clear</button>
+      <span style="font-size:11px;color:var(--text-secondary);">Click cell → select text → apply format</span>
+    </div>
+
+    <!-- Grid -->
+    <div class="table-wrap" id="tableWrap">
+      <table id="grid"></table>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar" id="statsBar">4 rows × 3 cols · 12 cells</div>
+
+    <noscript>
+      <div style="margin-top:10px;padding:14px;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;font-size:14px;color:#92400e;font-family:sans-serif;">
+        <strong>Table Generator — Free Online Tool</strong><br>
+        Create tables visually and export to Markdown, HTML, or MediaWiki format. Paste CSV/TSV data from Excel, edit cells inline, and navigate with keyboard. All processing in your browser. Enable JavaScript to use.
+      </div>
+    </noscript>
+  </div>
+
+  <!-- Format tabs + Output -->
+  <div class="main-section">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+      <div class="fmt-tabs" id="fmtTabs">
+        <button class="fmt-tab active" data-fmt="markdown" onclick="setFormat('markdown')">Markdown</button>
+        <button class="fmt-tab" data-fmt="html" onclick="setFormat('html')">HTML</button>
+        <button class="fmt-tab" data-fmt="mediawiki" onclick="setFormat('mediawiki')">MediaWiki</button>
+      </div>
+      <button class="btn primary" id="copyBtn" onclick="copyOutput()">Copy</button>
+    </div>
+    <div class="output-area" id="outputArea"></div>
+  </div>
+
+  <div class="ad-slot"><div class="ad-placeholder" id="ad-middle">ADSENSE_SLOT_MIDDLE</div></div>
+
+  <!-- SEO Content -->
+  <div class="section">
+    <h2>How to Use This Table Generator</h2>
+    <ol>
+      <li><strong>Edit cells inline</strong> — Click any cell and start typing. Press <kbd>Tab</kbd> to move to the next cell, <kbd>Shift+Tab</kbd> to go back, <kbd>Enter</kbd> to move down.</li>
+      <li><strong>Add or remove rows/columns</strong> — Use the +/- buttons above the grid. Right-click any cell for more options: insert row above/below, delete row/column.</li>
+      <li><strong>Paste data from spreadsheets</strong> — Copy cells from Excel or Google Sheets and paste directly into the grid. The tool auto-detects TSV (tab-separated) and CSV data. You can also paste an existing Markdown, HTML, or MediaWiki table to import it.</li>
+      <li><strong>Set column alignment</strong> — Click a column header to cycle through left, center, and right alignment.</li>
+      <li><strong>Choose output format</strong> — Select Markdown (GitHub, Reddit), HTML (websites), or MediaWiki (Wikipedia). Copy the generated code with one click.</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>Why Use This Table Generator?</h2>
+    <div style="display:grid; gap:16px; margin-top:8px;">
+      <div><h3>Three formats, one editor</h3><p>Switch between Markdown, HTML, and MediaWiki output with one click. No need for three different tools — edit once, export to any format.</p></div>
+      <div><h3>Paste from Excel or Google Sheets</h3><p>The biggest time-saver: copy data from any spreadsheet and paste it in. The tool auto-fills the grid. You can also paste an existing Markdown/HTML/MediaWiki table to import and edit it.</p></div>
+      <div><h3>Complete privacy, auto-save</h3><p>All editing happens in your browser. Your data is auto-saved to local storage — refresh the page and your work is still there. Nothing is ever uploaded to any server.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Frequently Asked Questions</h2>
+    <div style="display:grid; gap:16px; margin-top:8px;">
+      <div><strong>How do I paste data from Excel?</strong><p style="margin:4px 0 0; color:var(--text-secondary);">Select cells in Excel or Google Sheets, copy (Ctrl+C), click any cell in the grid, and paste (Ctrl+V). The tool detects tab-separated data and fills the grid starting from the selected cell.</p></div>
+      <div><strong>What Markdown table style is generated?</strong><p style="margin:4px 0 0; color:var(--text-secondary);">Standard Markdown tables with pipe separators and alignment dashes. Compatible with GitHub Flavored Markdown (GFM), Reddit, Stack Overflow, Notion, Obsidian, and most other Markdown renderers.</p></div>
+      <div><strong>What MediaWiki table style is generated?</strong><p style="margin:4px 0 0; color:var(--text-secondary);">Standard <code>{| class="wikitable"</code> syntax with cell/row separators and alignment attributes. Compatible with Wikipedia and all MediaWiki-powered wikis.</p></div>
+      <div><strong>Is this tool free?</strong><p style="margin:4px 0 0; color:var(--text-secondary);">Yes, completely free. No signup, no download, no limits.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>More Free Tools</h2>
+    <p style="font-size:14px; color:var(--text-secondary);">Browse other free online tools from TryTools — all run in your browser with no signup required.</p>
+    <div class="more-tools-grid">
+      <a href="/">🏠 Back to All Tools</a>
+      <a href="/timestamp-converter/">⏰ Timestamp Converter</a>
+      <a href="/json-formatter/">{ JSON Formatter</a>
+      <a href="/base64/">💾 Base64 Encoder</a>
+      <a href="/url-encoder/">🔗 URL Encoder</a>
+      <a href="/uuid-generator/">🎰 UUID Generator</a>
+      <a href="/color-converter/">🎨 Color Converter</a>
+      <a href="/word-counter/">✗ Word Counter</a>
+      <a href="/case-converter/">✘ Case Converter</a>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <p><strong>Privacy first:</strong> All editing happens in your browser. Auto-saved to local storage. No data is ever uploaded.</p>
+  <p>&copy; 2026 <a href="https://trytools.app">TryTools.app</a> · <a href="/privacy/">Privacy</a> · Free online tools, no signup required.</p>
+</footer>
+
+<!-- Context menu -->
+<div class="ctx-menu" id="ctxMenu">
+  <button onclick="ctxMerge()" style="display:none">Merge Selected Cells</button>
+  <button onclick="ctxSplit()" style="display:none">Split Cell</button>
+  <div class="sep" id="ctxSep1" style="display:none"></div>
+  <button onclick="ctxInsertRow('above')">Insert Row Above</button>
+  <button onclick="ctxInsertRow('below')">Insert Row Below</button>
+  <div class="sep"></div>
+  <button onclick="ctxDeleteRow()">Delete Row</button>
+  <button onclick="ctxDeleteCol()">Delete Column</button>
+</div>
+
+<script>
+'use strict';
+const $ = s => document.querySelector(s), $$ = s => document.querySelectorAll(s);
+
+// ── State ──────────────────────────────────────────────────
+let ROWS = 4, COLS = 3, hasHeader = false, format = 'markdown';
+// data[r][c] = {html:'', align:'', colspan:1, rowspan:1} — colspan/rowspan=0 means covered
+let data = [];
+let colAlign = [];
+let selStart = null, selEnd = null; // {r,c} selection range
+let undoStack = [], undoIdx = -1;
+const MAX_UNDO = 50;
+const LS_KEY = 'trytools_table_data_v3';
+
+// ── Grid rendering ─────────────────────────────────────────
+function cellSpan(r, c) { const cell=(data[r]||[])[c]; if(!cell) return {cs:1,rs:1}; return {cs:cell.colspan??1, rs:cell.rowspan??1}; }
+function isCovered(r, c) { const s=cellSpan(r,c); return s.cs===0||s.rs===0; }
+function isSelected(r, c) {
+  if (!selStart||!selEnd) return false;
+  const r1=Math.min(selStart.r,selEnd.r), r2=Math.max(selStart.r,selEnd.r);
+  const c1=Math.min(selStart.c,selEnd.c), c2=Math.max(selStart.c,selEnd.c);
+  return r>=r1&&r<=r2&&c>=c1&&c<=c2;
+}
+
+function renderGrid() {
+  const table = $('#grid');
+  let html = '<thead><tr><th></th>';
+  for (let c = 0; c < COLS; c++) {
+    const al = colAlign[c] || '';
+    const arrow = al === 'center' ? '⬆' : al === 'right' ? '➡' : '⬅';
+    html += `<th data-align="${al}" onclick="cycleColAlign(${c})" title="Click to cycle alignment">${arrow} Col ${c+1}</th>`;
+  }
+  html += '</tr></thead><tbody>';
+  for (let r = 0; r < ROWS; r++) {
+    html += '<tr>';
+    const tag = hasHeader && r === 0 ? 'th' : 'td';
+    html += `<${tag}>${r+1}</${tag}>`;
+    for (let c = 0; c < COLS; c++) {
+      if (isCovered(r, c)) continue; // cell is part of a merge — skip
+      const cell = (data[r]||[])[c] || {html:'',align:'',colspan:1,rowspan:1};
+      const al = cell.align || colAlign[c] || '';
+      const cs = (cell.colspan||1)>1 ? ` colspan="${cell.colspan}"` : '';
+      const rs = (cell.rowspan||1)>1 ? ` rowspan="${cell.rowspan}"` : '';
+      const sel = isSelected(r,c) ? ' selected' : '';
+      html += `<${tag} data-align="${al}" contenteditable="true" data-r="${r}" data-c="${c}" class="${sel}"${cs}${rs}>${cell.html}</${tag}>`;
+    }
+    html += '</tr>';
+  }
+  html += '</tbody>';
+  table.innerHTML = html;
+  bindCellEvents();
+  updateOutput();
+  updateStats();
+}
+
+function bindCellEvents() {
+  $$('#grid [contenteditable]').forEach(cell => {
+    cell.addEventListener('input', () => saveCell(cell));
+    cell.addEventListener('keydown', e => handleCellKey(e, cell));
+    cell.addEventListener('contextmenu', e => showCtxMenu(e, cell));
+    cell.addEventListener('focus', () => { currentCell = cell; updateFmtState(); });
+    cell.addEventListener('mousedown', e => {
+      if (e.button === 2) return;
+      const r=+cell.dataset.r, c=+cell.dataset.c;
+      if (e.shiftKey && selStart) {
+        if (selEnd && selEnd.r===r && selEnd.c===c) return; // no change
+        selEnd={r,c}; renderGrid();
+      } else if (!e.shiftKey) {
+        if (selStart && selStart.r===r && selStart.c===c) return; // no change
+        selStart={r,c}; selEnd={r,c}; renderGrid();
+      }
+    });
+  });
+}
+
+let currentCell = null;
+
+// ── Data ops ───────────────────────────────────────────────
+function newCell() { return {html:'',align:'',colspan:1,rowspan:1}; }
+function ensureCell(r, c) {
+  if (!data[r]) data[r] = [];
+  if (!data[r][c]) data[r][c] = newCell();
+  return data[r][c];
+}
+
+function saveCell(cell) {
+  const r = +cell.dataset.r, c = +cell.dataset.c;
+  const cellData = ensureCell(r, c);
+  let val = cell.innerHTML;
+  val = val.replace(/<br\s*\/?>/gi, '');
+  if (val === '&nbsp;' || val === ' ') val = '';
+  cellData.html = val;
+  pushUndo();
+  updateOutput();
+  updateStats();
+  autoSave();
+}
+
+function pushUndo() {
+  const state = JSON.stringify({data, colAlign, ROWS, COLS, hasHeader});
+  undoStack = undoStack.slice(0, undoIdx + 1);
+  undoStack.push(state);
+  if (undoStack.length > MAX_UNDO) undoStack.shift();
+  undoIdx = undoStack.length - 1;
+}
+
+function undo() {
+  if (undoIdx <= 0) return;
+  undoIdx--;
+  restoreState(undoStack[undoIdx]);
+}
+
+function restoreState(json) {
+  const s = JSON.parse(json);
+  data = s.data; colAlign = s.colAlign; ROWS = s.ROWS; COLS = s.COLS; hasHeader = s.hasHeader;
+  renderGrid();
+}
+
+// ── Row/Col ops ────────────────────────────────────────────
+function addRow() { ROWS++; pushUndo(); renderGrid(); autoSave(); }
+function removeRow() { if (ROWS > 1) { ROWS--; data = data.slice(0, ROWS); pushUndo(); renderGrid(); autoSave(); } }
+function addCol() { COLS++; pushUndo(); renderGrid(); autoSave(); }
+function removeCol() { if (COLS > 1) { COLS--; data.forEach(r => r.splice(COLS, 1)); colAlign.splice(COLS, 1); pushUndo(); renderGrid(); autoSave(); } }
+
+function insertRow(at) {
+  const ref = currentCell ? +currentCell.dataset.r : ROWS - 1;
+  const r = at === 'above' ? ref : ref + 1;
+  data.splice(r, 0, Array(COLS).fill(null).map(() => ({html:'',align:''})));
+  ROWS++; pushUndo(); renderGrid(); autoSave();
+}
+
+function deleteRow() {
+  if (ROWS <= 1) return;
+  const r = currentCell ? +currentCell.dataset.r : ROWS - 1;
+  data.splice(r, 1); ROWS--;
+  pushUndo(); renderGrid(); autoSave();
+}
+
+function deleteCol() {
+  if (COLS <= 1) return;
+  const c = currentCell ? +currentCell.dataset.c : COLS - 1;
+  data.forEach(r => r.splice(c, 1)); colAlign.splice(c, 1); COLS--;
+  pushUndo(); renderGrid(); autoSave();
+}
+
+function cycleColAlign(c) {
+  const cur = colAlign[c] || '';
+  colAlign[c] = cur === '' ? 'center' : cur === 'center' ? 'right' : '';
+  pushUndo(); renderGrid(); autoSave();
+}
+
+function toggleHeader() {
+  hasHeader = !hasHeader;
+  $('#headerBtn').textContent = 'Head Row: ' + (hasHeader ? 'On' : 'Off');
+  pushUndo(); renderGrid(); autoSave();
+}
+
+function clearTable() {
+  data = []; colAlign = []; ROWS = 4; COLS = 3; hasHeader = false;
+  $('#headerBtn').textContent = 'Head Row: Off';
+  pushUndo(); renderGrid(); autoSave();
+}
+
+// ── Formatting ─────────────────────────────────────────────
+function exec(cmd, val) {
+  document.execCommand(cmd, false, val || null);
+  const cell = currentCell;
+  if (cell) saveCell(cell);
+  updateFmtState();
+}
+function toggleBold() { exec('bold'); }
+function toggleItalic() { exec('italic'); }
+function applyTextColor(v) { exec('foreColor', v); }
+function applyBgColor(v) { exec('backColor', v); }
+function clearFormat() { exec('removeFormat'); }
+function updateFmtState() {
+  const b = $('#fmtBar').querySelector('[onclick="toggleBold()"]');
+  const i = $('#fmtBar').querySelector('[onclick="toggleItalic()"]');
+  if (b) b.classList.toggle('active-fmt', document.queryCommandState('bold'));
+  if (i) i.classList.toggle('active-fmt', document.queryCommandState('italic'));
+}
+
+// ── Keyboard ───────────────────────────────────────────────
+function handleCellKey(e, cell) {
+  const r = +cell.dataset.r, c = +cell.dataset.c;
+  if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); focusCell(r, c + 1); }
+  else if (e.key === 'Tab' && e.shiftKey) { e.preventDefault(); focusCell(r, c - 1); }
+  else if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); focusCell(r + 1, c); }
+  else if (e.key === 'ArrowUp') { const sel = getCaret(cell); if (sel === 0) { e.preventDefault(); focusCell(r - 1, c); } }
+  else if (e.key === 'ArrowDown') { const sel = getCaret(cell); if (sel >= cell.textContent.length) { e.preventDefault(); focusCell(r + 1, c); } }
+}
+
+function focusCell(r, c) {
+  if (r < 0 || r >= ROWS || c < 0 || c >= COLS) return;
+  const cell = $(`#grid [data-r="${r}"][data-c="${c}"]`);
+  if (cell) { cell.focus(); selectAll(cell); }
+}
+
+function getCaret(el) { const s = window.getSelection(); return s.rangeCount ? s.getRangeAt(0).startOffset : 0; }
+function selectAll(el) { const r = document.createRange(); r.selectNodeContents(el); const s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+
+// ── Merge / Split ──────────────────────────────────────────
+function hasSelection() { return selStart&&selEnd&&(selStart.r!==selEnd.r||selStart.c!==selEnd.c); }
+function mergeRange() {
+  if (!hasSelection()) return;
+  const r1=Math.min(selStart.r,selEnd.r), r2=Math.max(selStart.r,selEnd.r);
+  const c1=Math.min(selStart.c,selEnd.c), c2=Math.max(selStart.c,selEnd.c);
+  // Collect content from all cells, join them
+  let mergedHTML = '';
+  for (let r=r1; r<=r2; r++)
+    for (let c=c1; c<=c2; c++)
+      if (cellHTML(r,c)) mergedHTML += (mergedHTML?'<br>':'') + cellHTML(r,c);
+  // Set top-left cell as the merged cell
+  ensureCell(r1,c1).html = mergedHTML;
+  ensureCell(r1,c1).colspan = c2-c1+1;
+  ensureCell(r1,c1).rowspan = r2-r1+1;
+  // Mark all other cells in range as covered
+  for (let r=r1; r<=r2; r++)
+    for (let c=c1; c<=c2; c++)
+      if (r!==r1||c!==c1) { ensureCell(r,c).colspan=0; ensureCell(r,c).rowspan=0; }
+  selStart={r:r1,c:c1}; selEnd={r:r2,c:c2};
+  pushUndo(); renderGrid(); autoSave();
+}
+
+function splitCell() {
+  if (!selStart) return;
+  const cell = (data[selStart.r]||[])[selStart.c] || {};
+  const cs = cell.colspan||1, rs = cell.rowspan||1;
+  if (cs===1 && rs===1) return; // not merged
+  // Restore all covered cells in the span
+  for (let r=selStart.r; r<selStart.r+rs; r++)
+    for (let c=selStart.c; c<selStart.c+cs; c++)
+      if (r!==selStart.r||c!==selStart.c) { ensureCell(r,c).colspan=1; ensureCell(r,c).rowspan=1; }
+  // Reset top-left cell
+  cell.colspan = 1; cell.rowspan = 1;
+  pushUndo(); renderGrid(); autoSave();
+}
+
+// ── Context menu ───────────────────────────────────────────
+let ctxTarget = null;
+function showCtxMenu(e, cell) {
+  e.preventDefault();
+  ctxTarget = cell;
+  const menu = $('#ctxMenu');
+  // Show merge/split based on selection state
+  const mergeBtn = menu.querySelector('[onclick*="ctxMerge"]');
+  const splitBtn = menu.querySelector('[onclick*="ctxSplit"]');
+  const sep = menu.querySelector('#ctxSep1');
+  const showMerge = hasSelection();
+  const sc = selStart ? (data[selStart.r]||[])[selStart.c] : null;
+  const showSplit = sc && ((sc.colspan||1)>1||(sc.rowspan||1)>1);
+  if (mergeBtn) mergeBtn.style.display = showMerge ? '' : 'none';
+  if (splitBtn) splitBtn.style.display = showSplit ? '' : 'none';
+  if (sep) sep.style.display = (showMerge||showSplit) ? '' : 'none';
+  menu.style.display = 'block';
+  menu.style.left = e.clientX + 'px';
+  menu.style.top = e.clientY + 'px';
+}
+function hideCtxMenu() { $('#ctxMenu').style.display = 'none'; }
+document.addEventListener('click', e => { if (!e.target.closest('#ctxMenu')) hideCtxMenu(); });
+function ctxInsertRow(at) { hideCtxMenu(); insertRow(at); }
+function ctxDeleteRow() { hideCtxMenu(); deleteRow(); }
+function ctxDeleteCol() { hideCtxMenu(); deleteCol(); }
+function ctxMerge() { hideCtxMenu(); mergeRange(); }
+function ctxSplit() { hideCtxMenu(); splitCell(); }
+
+// ── Paste detection ────────────────────────────────────────
+$('#grid').addEventListener('paste', function(e) {
+  const text = (e.clipboardData || window.clipboardData).getData('text');
+  if (!text || !text.trim()) return;
+
+  // Try TSV/CSV
+  if (text.includes('\t') || (text.includes(',') && text.includes('\n'))) {
+    e.preventDefault();
+    const sep = text.includes('\t') ? '\t' : ',';
+    const rows = text.trim().split('\n').map(r => parseCSVLine(r, sep));
+    const startR = currentCell ? +currentCell.dataset.r : 0;
+    const startC = currentCell ? +currentCell.dataset.c : 0;
+    const needR = startR + rows.length;
+    const needC = startC + Math.max(...rows.map(r => r.length));
+    while (ROWS < needR) addRowSilent();
+    while (COLS < needC) addColSilent();
+    rows.forEach((row, ri) => {
+      row.forEach((val, ci) => {
+        const tr = startR + ri, tc = startC + ci;
+        if (!data[tr]) data[tr] = [];
+        if (!data[tr][tc]) data[tr][tc] = {html:'',align:''};
+        data[tr][tc].html = escHTML(val.trim());
+      });
+    });
+    pushUndo(); renderGrid(); autoSave();
+    return;
+  }
+
+  // Try Markdown/HTML/MediaWiki table paste
+  const parsed = parseTablePaste(text);
+  if (parsed) {
+    e.preventDefault();
+    ROWS = parsed.rows; COLS = parsed.cols;
+    data = parsed.data; colAlign = parsed.colAlign; hasHeader = parsed.hasHeader;
+    $('#headerBtn').textContent = 'Head Row: ' + (hasHeader ? 'On' : 'Off');
+    pushUndo(); renderGrid(); autoSave();
+  }
+});
+
+function parseCSVLine(line, sep) {
+  const result = []; let current = '', inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') { inQuotes = !inQuotes; continue; }
+    if (ch === sep && !inQuotes) { result.push(current); current = ''; continue; }
+    current += ch;
+  }
+  result.push(current);
+  return result;
+}
+
+function addRowSilent() { ROWS++; }
+function addColSilent() { COLS++; }
+
+function parseTablePaste(text) {
+  // Try Markdown table
+  const mdLines = text.trim().split('\n').filter(l => l.includes('|'));
+  if (mdLines.length >= 2 && mdLines[0].includes('|')) {
+    const headerLine = mdLines[0].split('|').filter(c => c.trim());
+    const sepLine = mdLines[1] || '';
+    const hasSep = /^[\s|:\-]+$/.test(sepLine.replace(/\|/g, ''));
+    const dataStart = hasSep ? 2 : 1;
+    const dataLines = mdLines.slice(dataStart).map(l => l.split('|').filter(c => c.trim()));
+    const allRows = hasSep ? [headerLine, ...dataLines] : [headerLine, ...dataLines];
+    const nRows = allRows.length;
+    const nCols = Math.max(...allRows.map(r => r.length));
+    // Parse column alignments from separator line
+    const newColAlign = [];
+    if (hasSep) {
+      sepLine.split('|').filter(c => c.trim()).forEach(c => {
+        const s = c.trim();
+        if (s.startsWith(':') && s.endsWith(':')) newColAlign.push('center');
+        else if (s.endsWith(':')) newColAlign.push('right');
+        else newColAlign.push('');
+      });
+    }
+    const newData = allRows.map(r => {
+      const row = [];
+      for (let c = 0; c < nCols; c++) row.push({text: (r[c]||'').trim(), align:''});
+      return row;
+    });
+    return { rows: nRows, cols: nCols, data: newData, colAlign: newColAlign, hasHeader: hasSep };
+  }
+
+  // Try HTML table
+  const htmlMatch = text.match(/<table[\s\S]*?<\/table>/i);
+  if (htmlMatch) {
+    const div = document.createElement('div');
+    div.innerHTML = htmlMatch[0];
+    const table = div.querySelector('table');
+    if (!table) return null;
+    const rows = table.querySelectorAll('tr');
+    const newData = []; let nCols = 0;
+    rows.forEach(tr => {
+      const cells = tr.querySelectorAll('td,th');
+      const row = [];
+      cells.forEach(cell => { row.push({html: escHTML(cell.textContent.trim()), align:''}); });
+      if (row.length > nCols) nCols = row.length;
+      newData.push(row);
+    });
+    return { rows: newData.length, cols: nCols, data: newData, colAlign: [], hasHeader: rows[0] && rows[0].querySelector('th') };
+  }
+
+  // Try MediaWiki table
+  if (text.includes('{|') && text.includes('|}')) {
+    const lines = text.split('\n');
+    const newData = []; let currentRow = []; let isHeader = false;
+    let maxCols = 0;
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (trimmed === '{|' || trimmed.startsWith('{|')) continue;
+      if (trimmed === '|}') break;
+      if (trimmed.startsWith('!') && !trimmed.startsWith('!!')) {
+        // Header cell
+        const content = trimmed.replace(/^!\s*/, '').replace(/\|\|/g, '\t').split('\t');
+        content.forEach(c => currentRow.push({text: c.trim(), align:''}));
+        isHeader = true;
+      } else if (trimmed.startsWith('|') && !trimmed.startsWith('|-') && !trimmed.startsWith('|+')) {
+        const content = trimmed.replace(/^\|\s*/, '').replace(/\|\|/g, '\t').split('\t');
+        content.forEach(c => currentRow.push({text: c.trim(), align:''}));
+      }
+      if (trimmed === '|-' || trimmed.startsWith('|-') || trimmed === '|}') {
+        if (currentRow.length > 0) { newData.push(currentRow); maxCols = Math.max(maxCols, currentRow.length); currentRow = []; isHeader = false; }
+      }
+    }
+    if (currentRow.length > 0) { newData.push(currentRow); maxCols = Math.max(maxCols, currentRow.length); }
+    // Pad rows to same length
+    newData.forEach(r => { while (r.length < maxCols) r.push({html:'',align:''}); });
+    return { rows: newData.length, cols: maxCols, data: newData, colAlign: [], hasHeader: isHeader };
+  }
+
+  return null;
+}
+
+// ── Format generation ──────────────────────────────────────
+function setFormat(fmt) {
+  format = fmt;
+  $$('#fmtTabs .fmt-tab').forEach(t => t.classList.toggle('active', t.dataset.fmt === fmt));
+  updateOutput();
+}
+
+function updateOutput() {
+  const area = $('#outputArea');
+  let out = '';
+  if (format === 'markdown') out = generateMarkdown();
+  else if (format === 'html') out = generateHTML();
+  else if (format === 'mediawiki') out = generateMediaWiki();
+  area.textContent = out || '(empty table)';
+}
+
+function cellHTML(r, c) { return ((data[r]||[])[c] || {}).html || ''; }
+function cellText(r, c) { return stripTags(cellHTML(r, c)); }
+function cellAlign(r, c) { return ((data[r]||[])[c] || {}).align || colAlign[c] || ''; }
+function cellColspan(r, c) { return (data[r]||[])[c] ? ((data[r][c].colspan||1)) : 1; }
+function cellRowspan(r, c) { return (data[r]||[])[c] ? ((data[r][c].rowspan||1)) : 1; }
+
+function stripTags(s) { return s.replace(/<[^>]*>/g, ''); }
+
+// Convert HTML to markdown inline formatting
+function htmlToMD(html) {
+  return html
+    .replace(/<strong>(.*?)<\/strong>/gi, '**$1**')
+    .replace(/<b>(.*?)<\/b>/gi, '**$1**')
+    .replace(/<em>(.*?)<\/em>/gi, '*$1*')
+    .replace(/<i>(.*?)<\/i>/gi, '*$1*')
+    .replace(/<span style="([^"]*)">(.*?)<\/span>/gi, (_,style,text) => {
+      // Keep inline HTML spans — GFM allows raw HTML
+      return `<span style="${style}">${text}</span>`;
+    })
+    .replace(/<br\s*\/?>/gi, '<br>');
+}
+
+// Convert HTML to MediaWiki inline formatting
+function htmlToWiki(html) {
+  return html
+    .replace(/<strong>(.*?)<\/strong>/gi, "'''$1'''")
+    .replace(/<b>(.*?)<\/b>/gi, "'''$1'''")
+    .replace(/<em>(.*?)<\/em>/gi, "''$1''")
+    .replace(/<i>(.*?)<\/i>/gi, "''$1''")
+    .replace(/<span style="([^"]*)">(.*?)<\/span>/gi, '$2')
+    .replace(/<br\s*\/?>/gi, '');
+}
+
+function generateMarkdown() {
+  // Markdown doesn't support colspan/rowspan natively; generate inline HTML for spanned cells
+  let out = '';
+  for (let r = 0; r < ROWS; r++) {
+    out += '|';
+    for (let c = 0; c < COLS; c++) {
+      if (isCovered(r,c)) continue;
+      const cs = cellColspan(r,c), rs = cellRowspan(r,c);
+      if (cs>1||rs>1) {
+        out += ` <td colspan="${cs}" rowspan="${rs}">${htmlToMD(cellHTML(r,c)||' ')}</td> |`;
+      } else {
+        out += ' ' + htmlToMD(cellHTML(r,c)||' ') + ' |';
+      }
+    }
+    out += '\n';
+    if (r===0 && hasHeader) {
+      out += '|';
+      for (let c=0; c<COLS; c++) {
+        if (isCovered(0,c)) continue;
+        const al=colAlign[c]||'';
+        out += (al==='center'?':':' ')+'---'+(al==='right'||al==='center'?':':' ')+'|';
+      }
+      out += '\n';
+    }
+  }
+  return out;
+}
+
+function generateHTML() {
+  let out = '<table>\n';
+  for (let r = 0; r < ROWS; r++) {
+    const isHead = hasHeader && r === 0;
+    out += '  <tr>\n';
+    for (let c = 0; c < COLS; c++) {
+      if (isCovered(r,c)) continue;
+      const tag = isHead ? 'th' : 'td';
+      const al = cellAlign(r, c);
+      const cs = cellColspan(r,c), rs = cellRowspan(r,c);
+      let attrs = al ? ` style="text-align:${al}"` : '';
+      if (cs>1) attrs += ` colspan="${cs}"`;
+      if (rs>1) attrs += ` rowspan="${rs}"`;
+      out += `    <${tag}${attrs}>${cellHTML(r,c)||'&nbsp;'}</${tag}>\n`;
+    }
+    out += '  </tr>\n';
+  }
+  out += '</table>';
+  return out;
+}
+
+function generateMediaWiki() {
+  let out = '{| class="wikitable"\n';
+  for (let r = 0; r < ROWS; r++) {
+    const isHead = hasHeader && r === 0;
+    out += '|-\n';
+    for (let c = 0; c < COLS; c++) {
+      if (isCovered(r,c)) continue;
+      const prefix = isHead ? '!' : '|';
+      const al = cellAlign(r, c);
+      let attrs = '';
+      if (al==='center') attrs = ' style="text-align:center"';
+      else if (al==='right') attrs = ' style="text-align:right"';
+      const cs=cellColspan(r,c), rs=cellRowspan(r,c);
+      if (cs>1) attrs += (attrs?' ':'') + `colspan="${cs}"`;
+      if (rs>1) attrs += (attrs?' ':'') + `rowspan="${rs}"`;
+      const val = htmlToWiki(cellHTML(r,c)||'');
+      const sep = isHead ? ' !! ' : ' || ';
+      const attrStr = attrs ? attrs + '|' : '';
+      if (c===0) out += `${prefix} ${attrStr}${val}`;
+      else {
+        // Find first non-covered cell in this row for proper separator
+        let firstInRow = true;
+        for (let cc = 0; cc < c; cc++) if (!isCovered(r,cc)) { firstInRow = false; break; }
+        if (firstInRow) out += `${prefix} ${attrStr}${val}`;
+        else out += `${sep}${attrStr}${val}`;
+      }
+    }
+    out += '\n';
+  }
+  out += '|}';
+  return out;
+}
+
+// ── Copy ───────────────────────────────────────────────────
+function copyOutput() {
+  const text = $('#outputArea').textContent;
+  if (!text.trim()) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(() => flashCopy()).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+function flashCopy() {
+  const btn = $('#copyBtn'); btn.textContent = 'Copied!'; btn.classList.add('success');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('success'); }, 1500);
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea'); ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta);
+  ta.select(); try { document.execCommand('copy'); flashCopy(); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+// ── Auto-save ──────────────────────────────────────────────
+function autoSave() {
+  try { localStorage.setItem(LS_KEY, JSON.stringify({data, colAlign, ROWS, COLS, hasHeader})); } catch(e) {}
+}
+function autoLoad() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) { const s = JSON.parse(raw); data = s.data; colAlign = s.colAlign; ROWS = s.ROWS; COLS = s.COLS; hasHeader = s.hasHeader; }
+  } catch(e) {}
+}
+autoLoad();
+
+// ── Update stats ───────────────────────────────────────────
+function updateStats() {
+  let filled = 0, total = 0;
+  for (let r = 0; r < ROWS; r++)
+    for (let c = 0; c < COLS; c++) {
+      if (isCovered(r,c)) continue;
+      total++;
+      if (cellText(r,c)) filled++;
+    }
+  $('#statsBar').textContent = `${ROWS} rows × ${COLS} cols · ${filled} of ${total} cells filled`;
+}
+
+// ── Helpers ────────────────────────────────────────────────
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escHTML(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Global keyboard shortcuts ──────────────────────────────
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'b') { e.preventDefault(); toggleBold(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'i') { e.preventDefault(); toggleItalic(); }
+});
+
+// Update format button states when cell focus changes
+document.addEventListener('selectionchange', () => {
+  const el = document.activeElement;
+  if (el && el.hasAttribute('contenteditable')) updateFmtState();
+});
+
+// ── Init ───────────────────────────────────────────────────
+function init() {
+  if (!data || !data.length) {
+    data = []; colAlign = [];
+    for (let r = 0; r < ROWS; r++) { data[r] = []; for (let c = 0; c < COLS; c++) data[r][c] = newCell(); }
+  }
+  // Ensure all cells have colspan/rowspan defaults for v2→v3 migration
+  for (let r = 0; r < ROWS; r++)
+    for (let c = 0; c < COLS; c++) {
+      const cell = ensureCell(r,c);
+      if (cell.colspan===undefined) cell.colspan = 1;
+      if (cell.rowspan===undefined) cell.rowspan = 1;
+    }
+  $('#headerBtn').textContent = 'Head Row: ' + (hasHeader ? 'On' : 'Off');
+  renderGrid();
+}
+init();
+</script>
+
+</body>
+</html>

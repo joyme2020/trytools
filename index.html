@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Online Tools — Timestamp Converter, JSON Formatter &amp; More | TryTools</title>
+<meta name="description" content="Free online tools for developers, designers, and everyday tasks. All tools run in your browser — no uploads, no signup, complete privacy. Timestamp converter, JSON formatter, Base64 encoder, and more.">
+<meta name="keywords" content="free online tools, timestamp converter, json formatter, base64 encoder, developer tools, privacy tools, browser tools">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://trytools.app/">
+<meta property="og:title" content="Free Online Tools — Timestamp Converter, JSON Formatter & More | TryTools">
+<meta property="og:description" content="Free online tools that run in your browser. No signup, no uploads, complete privacy.">
+<meta property="og:url" content="https://trytools.app/">
+<meta property="og:site_name" content="TryTools">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free Online Tools — Timestamp Converter, JSON Formatter & More | TryTools">
+<meta name="twitter:description" content="Free online tools that run in your browser. No signup, no uploads, complete privacy.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "TryTools",
+  "url": "https://trytools.app/",
+  "description": "Free online tools for developers and everyday tasks. All processing happens in your browser.",
+  "applicationCategory": "DeveloperApplication",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://trytools.app/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "Free Online Tools",
+  "url": "https://trytools.app/",
+  "description": "Collection of free online tools including timestamp converter, JSON formatter, Base64 encoder, and more. No signup required.",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Timestamp Converter", "url": "https://trytools.app/timestamp-converter/"},
+      {"@type": "ListItem", "position": 2, "name": "JSON Formatter", "url": "https://trytools.app/json-formatter/"},
+      {"@type": "ListItem", "position": 3, "name": "Base64 Encoder", "url": "https://trytools.app/base64/"},
+      {"@type": "ListItem", "position": 4, "name": "URL Encoder", "url": "https://trytools.app/url-encoder/"},
+      {"@type": "ListItem", "position": 5, "name": "UUID Generator", "url": "https://trytools.app/uuid-generator/"},
+      {"@type": "ListItem", "position": 6, "name": "Color Converter", "url": "https://trytools.app/color-converter/"},
+      {"@type": "ListItem", "position": 7, "name": "Word Counter", "url": "https://trytools.app/word-counter/"},
+      {"@type": "ListItem", "position": 8, "name": "Case Converter", "url": "https://trytools.app/case-converter/"},
+      {"@type": "ListItem", "position": 9, "name": "Table Generator", "url": "https://trytools.app/table-generator/"}
+    ]
+  }
+}
+</script>
+<style>
+:root {
+  --bg: #fafafa;
+  --surface: #fff;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-secondary: #6b7280;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 64px 20px 48px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+}
+
+header h1 {
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+
+header .tagline {
+  font-size: 18px;
+  opacity: .85;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+header .privacy-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  background: rgba(255,255,255,.15);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Tools grid */
+.tools-section { padding: 48px 0; }
+
+.tools-section h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.tool-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  text-decoration: none;
+  color: var(--text);
+  transition: border-color .15s, box-shadow .15s, transform .15s;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tool-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(99,102,241,.12);
+  transform: translateY(-2px);
+}
+
+.tool-card.ready .icon { font-size: 28px; }
+
+.tool-card .name {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.tool-card .desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.tool-card .badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 10px;
+  margin-top: auto;
+}
+
+.badge-live { background: #d1fae5; color: #065f46; }
+.badge-soon { background: #fef3c7; color: #92400e; }
+
+/* Ad slot */
+.ad-slot { text-align: center; padding: 24px 0; }
+.ad-placeholder {
+  background: #f3f4f6;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* SEO */
+.seo-section { padding: 24px 0 48px; }
+.seo-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.seo-section p {
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.seo-section ul {
+  color: var(--text-secondary);
+  padding-left: 20px;
+  display: grid;
+  gap: 6px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  border-top: 1px solid var(--border);
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  header { padding: 40px 16px 32px; }
+  .tools-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Free Online Tools, No Signup Required</h1>
+  <p class="tagline">Timestamp converter, JSON formatter, Base64 encoder, and more — all run in your browser with complete privacy.</p>
+  <div class="privacy-badge">&#128274; All processing happens locally</div>
+</header>
+
+<main>
+<div class="container">
+  <div class="tools-section">
+    <h2>Available Tools</h2>
+    <div class="tools-grid">
+
+      <a href="/timestamp-converter/" class="tool-card ready">
+        <span class="icon">&#9200;</span>
+        <span class="name">Timestamp Converter</span>
+        <span class="desc">Convert Unix timestamps to human-readable dates and vice versa. Supports natural language input and multiple timezones.</span>
+        <span class="badge badge-live">Live</span>
+      </a>
+
+      <a href="/json-formatter/" class="tool-card ready">
+        <span class="icon">&#123;</span>
+        <span class="name">JSON Formatter</span>
+        <span class="desc">Format, validate, and beautify JSON data. Minify or prettify with one click.</span>
+        <span class="badge badge-live">Live</span>
+      </a>
+
+      <a href="/base64/" class="tool-card ready">
+        <span class="icon">&#128190;</span>
+        <span class="name">Base64 Encoder</span>
+        <span class="desc">Encode and decode Base64 strings. Supports text, Unicode, and file conversion.</span>
+        <span class="badge badge-live">Live</span>
+      </a>
+
+      <a href="/url-encoder/" class="tool-card ready">
+        <span class="icon">&#128279;</span>
+        <span class="name">URL Encoder</span>
+        <span class="desc">URL-encode and decode special characters. Shows both encodeURIComponent and encodeURI results.</span>
+        <span class="badge badge-live">Live</span>
+      </a>
+
+      <a href="/uuid-generator/" class="tool-card ready">
+        <span class="icon">&#127380;</span>
+        <span class="name">UUID Generator</span>
+        <span class="desc">Generate random UUID v4 identifiers in bulk. Copy individually or all at once.</span>
+        <span class="badge badge-live">Live</span>
+      </a>
+
+      <a href="/color-converter/" class="tool-card ready">
+        <span class="icon">&#127912;</span>
+        <span class="name">Color Converter</span>
+        <span class="desc">Convert colors between HEX, RGB, and HSL formats with live preview and color picker.</span>
+        <span class="badge badge-live">Live</span>
+      </a>
+
+      <a href="/word-counter/" class="tool-card ready">
+        <span class="icon">&#9997;</span>
+        <span class="name">Word Counter</span>
+        <span class="desc">Count words, characters, sentences, and paragraphs. Keyword density analysis included.</span>
+        <span class="badge badge-live">Live</span>
+      </a>
+
+      <a href="/case-converter/" class="tool-card ready">
+        <span class="icon">&#9998;</span>
+        <span class="name">Case Converter</span>
+        <span class="desc">Convert text between uppercase, lowercase, title case, sentence case, and more.</span>
+        <span class="badge badge-live">Live</span>
+      </a>
+
+      <a href="/table-generator/" class="tool-card ready">
+        <span class="icon">&#128202;</span>
+        <span class="name">Table Generator</span>
+        <span class="desc">Create tables visually. Export to Markdown, HTML, or MediaWiki. Paste CSV, edit inline.</span>
+        <span class="badge badge-live">Live</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- Ad Slot -->
+  <div class="ad-slot">
+    <div class="ad-placeholder">ADSENSE_SLOT_HOME</div>
+  </div>
+
+  <!-- SEO Content -->
+  <div class="seo-section">
+    <h2>Free Online Tools — Privacy First</h2>
+    <p>TryTools is a collection of free online tools for developers, designers, and anyone who needs quick utilities without the hassle. Every tool runs entirely in your browser using JavaScript. Your files and data never leave your device — no server uploads, no tracking, no signups.</p>
+    <p>Why browser-side processing matters:</p>
+    <ul>
+      <li><strong>Privacy</strong> — Sensitive data never touches a server. Useful when working with proprietary code, personal documents, or confidential information.</li>
+      <li><strong>Speed</strong> — No round-trips to a backend. Results appear instantly as you type.</li>
+      <li><strong>No limits</strong> — No daily quotas, no paywalls. Use each tool as much as you need.</li>
+    </ul>
+    <p style="margin-top:16px;">9 free online tools — all run in your browser with complete privacy. Timestamp converter, JSON formatter, Base64 encoder, URL encoder, UUID generator, color converter, word counter, case converter, and table generator. No signup required.</p>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <p><strong>Privacy first:</strong> All processing happens in your browser. No data is ever uploaded to any server.</p>
+  <p>&copy; 2026 <a href="https://trytools.app">TryTools.app</a> &middot; <a href="/privacy/">Privacy</a> &middot; Free online tools, no signup required.</p>
+</footer>
+
+</body>
+</html>

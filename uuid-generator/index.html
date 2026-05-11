@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UUID Generator - Generate UUID v4 Online in Bulk | Free Tool</title>
+<meta name="description" content="Free online UUID v4 generator. Generate random UUIDs individually or in bulk (up to 100 at once). Options for uppercase, lowercase, and hyphen format. All generation in your browser — no data sent to any server.">
+<meta name="keywords" content="uuid generator, uuid v4, generate uuid, random uuid, bulk uuid generator, guid generator, unique identifier, uuid online">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://trytools.app/uuid-generator/">
+<meta property="og:title" content="Free Online UUID Generator — Generate UUID v4 in Bulk">
+<meta property="og:description" content="Generate random UUIDs instantly in your browser. Bulk mode, copy all, and format options. Free, no signup.">
+<meta property="og:url" content="https://trytools.app/uuid-generator/">
+<meta property="og:site_name" content="TryTools">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free Online UUID Generator — Generate UUID v4 in Bulk">
+<meta name="twitter:description" content="Generate random UUIDs instantly in your browser. Bulk mode, copy all, and format options.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "UUID Generator",
+  "url": "https://trytools.app/uuid-generator/",
+  "description": "Free online UUID v4 generator. All generation happens in your browser.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://trytools.app/"},
+    {"@type": "ListItem", "position": 2, "name": "UUID Generator", "item": "https://trytools.app/uuid-generator/"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Generate UUIDs",
+  "step": [
+    {"@type": "HowToStep", "position": 1, "text": "Choose how many UUIDs to generate using the quantity selector — from 1 to 100."},
+    {"@type": "HowToStep", "position": 2, "text": "Select format options: uppercase or lowercase, with or without hyphens."},
+    {"@type": "HowToStep", "position": 3, "text": "Click Generate to create fresh UUIDs. Each UUID is version 4 (random), generated using your browser's cryptographically secure random number generator."},
+    {"@type": "HowToStep", "position": 4, "text": "Click Copy next to any UUID to copy it individually, or use Copy All to copy every generated UUID at once."}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a UUID?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "UUID stands for Universally Unique Identifier. It is a 128-bit number represented as 32 hexadecimal digits in the format 8-4-4-4-12 (e.g., 550e8400-e29b-41d4-a716-446655440000). Version 4 UUIDs are generated entirely from random numbers, making collisions astronomically unlikely — you would need to generate billions of UUIDs per second for billions of years to have a meaningful chance of a duplicate."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Are these UUIDs cryptographically secure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. This tool uses your browser's crypto.randomUUID() API, which is backed by the operating system's cryptographically secure pseudorandom number generator (CSPRNG). UUIDs generated this way are suitable for security-sensitive use cases like API keys, session tokens, and database primary keys."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I generate multiple UUIDs at once?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. Use the quantity selector to generate 1, 5, 10, 25, 50, or 100 UUIDs at once. Each UUID is independently generated. You can copy individual UUIDs or use the Copy All button to copy the entire batch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What format options are available?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can choose between lowercase (standard), uppercase, with hyphens (standard 8-4-4-4-12 format), or without hyphens (32 continuous hex characters). The without-hyphens format is useful for systems that store UUIDs as raw hex strings."
+      }
+    }
+  ]
+}
+</script>
+<style>
+:root {
+  --bg: #fafafa;
+  --surface: #fff;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-secondary: #6b7280;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --success: #10b981;
+  --error: #ef4444;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 48px 20px 32px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+}
+
+header h1 {
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 16px;
+  opacity: .85;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+.breadcrumb {
+  padding: 12px 20px;
+  font-size: 14px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.breadcrumb a { color: var(--accent); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb span { color: var(--text-secondary); }
+
+/* Controls */
+.controls-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin: 24px 0 20px;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.controls-row + .controls-row { margin-top: 12px; }
+
+.control-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Quantity buttons */
+.qty-btns {
+  display: flex;
+  gap: 0;
+}
+.qty-btn {
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: all .15s;
+}
+.qty-btn:first-child { border-radius: 6px 0 0 6px; }
+.qty-btn:last-child { border-radius: 0 6px 6px 0; }
+.qty-btn + .qty-btn { margin-left: -1px; }
+.qty-btn:hover { border-color: var(--accent); color: var(--accent); }
+.qty-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Toggle switches */
+.toggle-group {
+  display: flex;
+  gap: 0;
+}
+.toggle-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: all .15s;
+}
+.toggle-btn:first-child { border-radius: 6px 0 0 6px; }
+.toggle-btn:last-child { border-radius: 0 6px 6px 0; }
+.toggle-btn + .toggle-btn { margin-left: -1px; }
+.toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
+.toggle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* Generate button */
+.btn {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn.primary:hover { background: var(--accent-hover); }
+.btn.success { background: var(--success); color: #fff; border-color: var(--success); }
+
+/* Result area */
+.result-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.result-header h2 { font-size: 18px; font-weight: 600; }
+
+.uuid-list {
+  display: grid;
+  gap: 6px;
+}
+
+.uuid-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--bg);
+  border-radius: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  transition: background .15s;
+}
+.uuid-item:hover { background: #eef2ff; }
+
+.uuid-item .index {
+  color: var(--text-secondary);
+  font-size: 11px;
+  min-width: 24px;
+  text-align: right;
+}
+
+.uuid-item .value {
+  flex: 1;
+  word-break: break-all;
+  user-select: all;
+}
+
+.uuid-item .copy-btn {
+  background: none;
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--text-secondary);
+  transition: all .15s;
+  white-space: nowrap;
+}
+.uuid-item .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+.uuid-item .copy-btn.copied { border-color: var(--success); color: var(--success); }
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Ad slot */
+.ad-slot { text-align: center; padding: 24px 0; }
+.ad-placeholder {
+  background: #f3f4f6;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* SEO sections */
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.section h2 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+.section h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+.section p, .section li { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+.section ol, .section ul { padding-left: 20px; display: grid; gap: 6px; }
+.section code {
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* More tools */
+.more-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.more-tools-grid a, .more-tools-grid span {
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 14px;
+}
+.more-tools-grid span { color: var(--text-secondary); }
+
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .controls-row { gap: 10px; }
+  .controls-section { padding: 16px; }
+  .result-section { padding: 16px; }
+  .section { padding: 20px 16px; }
+  .uuid-item { font-size: 11px; padding: 8px 10px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="https://trytools.app/">Home</a> <span>&rsaquo;</span> UUID Generator
+</nav>
+
+<header>
+  <h1>UUID Generator</h1>
+  <p>Generate random UUID v4 identifiers instantly. Bulk mode, format options, and one-click copy.</p>
+</header>
+
+<main>
+<div class="container">
+
+  <!-- Ad Slot Top -->
+  <div class="ad-slot">
+    <div class="ad-placeholder" id="ad-top">ADSENSE_SLOT_TOP</div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls-section">
+    <div class="controls-row">
+      <span class="control-label">Quantity:</span>
+      <div class="qty-btns" id="qtyBtns">
+        <button class="qty-btn" data-n="1">1</button>
+        <button class="qty-btn active" data-n="5">5</button>
+        <button class="qty-btn" data-n="10">10</button>
+        <button class="qty-btn" data-n="25">25</button>
+        <button class="qty-btn" data-n="50">50</button>
+        <button class="qty-btn" data-n="100">100</button>
+      </div>
+    </div>
+    <div class="controls-row">
+      <span class="control-label">Case:</span>
+      <div class="toggle-group" id="caseToggle">
+        <button class="toggle-btn active" data-v="lower">lowercase</button>
+        <button class="toggle-btn" data-v="upper">UPPERCASE</button>
+      </div>
+      <span class="control-label">Format:</span>
+      <div class="toggle-group" id="hyphenToggle">
+        <button class="toggle-btn active" data-v="yes">with hyphens</button>
+        <button class="toggle-btn" data-v="no">no hyphens</button>
+      </div>
+      <button class="btn primary" onclick="doGenerate()" style="margin-left:auto;">&#x1F504; Generate</button>
+    </div>
+
+    <noscript>
+      <div style="margin-top:14px;padding:14px;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;font-size:14px;color:#92400e;font-family:sans-serif;">
+        <strong>UUID Generator — Free Online Tool</strong><br>
+        This tool generates random UUID v4 identifiers using your browser's cryptographically secure random number generator.
+        Supports bulk generation (1–100), uppercase/lowercase, and with/without hyphens formats.
+        All generation happens in your browser — no data is ever sent to any server.
+        Enable JavaScript to use the interactive tool.
+      </div>
+    </noscript>
+  </div>
+
+  <!-- Results -->
+  <div class="result-section" id="resultSection">
+    <div class="result-header">
+      <h2 id="resultTitle">Generated UUIDs</h2>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" id="copyAllBtn" onclick="copyAll()" style="display:none;">&#x1F4CB; Copy All</button>
+        <button class="btn" onclick="doGenerate()">&#x1F504; Regenerate</button>
+      </div>
+    </div>
+    <div class="uuid-list" id="uuidList">
+      <div class="empty-state">Click <strong>Generate</strong> to create UUIDs. All generation happens in your browser — no server round-trips.</div>
+    </div>
+  </div>
+
+  <!-- Ad Slot Middle -->
+  <div class="ad-slot">
+    <div class="ad-placeholder" id="ad-middle">ADSENSE_SLOT_MIDDLE</div>
+  </div>
+
+  <!-- SEO Content -->
+  <div class="section">
+    <h2>How to Use This UUID Generator</h2>
+    <ol>
+      <li><strong>Select quantity</strong> — Choose how many UUIDs to generate: 1, 5, 10, 25, 50, or 100 at a time.</li>
+      <li><strong>Pick format options</strong> — Choose lowercase (standard) or uppercase, and with hyphens (<code>550e8400-e29b-41d4-a716-446655440000</code>) or without (<code>550e8400e29b41d4a716446655440000</code>).</li>
+      <li><strong>Click Generate</strong> — Fresh UUID v4 identifiers are created instantly using your browser's <code>crypto.randomUUID()</code> API. No page reload, no server call.</li>
+      <li><strong>Copy results</strong> — Click the Copy button next to any UUID to copy it individually, or use <strong>Copy All</strong> to copy the entire batch at once.</li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>Why Use This UUID Generator?</h2>
+    <div style="display:grid; gap:16px; margin-top:8px;">
+      <div>
+        <h3>Cryptographically secure</h3>
+        <p>UUIDs are generated using your browser's <code>crypto.randomUUID()</code> API, backed by the operating system's CSPRNG. These are not pseudo-random numbers from <code>Math.random()</code> — they are suitable for security-sensitive use cases like API keys, session tokens, and database primary keys.</p>
+      </div>
+      <div>
+        <h3>Complete privacy</h3>
+        <p>All UUIDs are generated entirely in your browser. No data is ever sent to any server. This means no tracking, no logs, and no risk of your generated identifiers being intercepted or stored by a third party.</p>
+      </div>
+      <div>
+        <h3>Instant, no limits</h3>
+        <p>Generate as many UUIDs as you need — 1, 100, or keep clicking Regenerate. There are no rate limits, no daily quotas, and no signup required. Each generation is near-instant, even for batches of 100.</p>
+      </div>
+      <div>
+        <h3>Flexible formats</h3>
+        <p>Need UUIDs in a specific format? Toggle between lowercase, uppercase, with hyphens, or as 32-character raw hex strings. Useful for different database systems, API requirements, or coding conventions.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Frequently Asked Questions</h2>
+    <div style="display:grid; gap:16px; margin-top:8px;">
+      <div>
+        <strong>What is UUID v4?</strong>
+        <p style="margin:4px 0 0; color:var(--text-secondary);">UUID version 4 is a universally unique identifier generated entirely from random numbers (122 of the 128 bits are random, with 6 bits reserved for version and variant markers). The format is <code>xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</code> where y is 8, 9, a, or b. The probability of generating a duplicate is so low it is effectively zero for practical purposes.</p>
+      </div>
+      <div>
+        <strong>When should I use a UUID instead of an auto-increment ID?</strong>
+        <p style="margin:4px 0 0; color:var(--text-secondary);">UUIDs are ideal for distributed systems where multiple servers generate IDs independently without coordination. They also prevent ID enumeration attacks (unlike sequential IDs), work well as primary keys in distributed databases, and are useful for idempotency keys in API requests.</p>
+      </div>
+      <div>
+        <strong>Is crypto.randomUUID() available in all browsers?</strong>
+        <p style="margin:4px 0 0; color:var(--text-secondary);">Yes. The <code>crypto.randomUUID()</code> API is supported in all modern browsers: Chrome 92+, Firefox 95+, Safari 15.4+, and Edge 92+. For older browsers, this tool falls back to <code>crypto.getRandomValues()</code> to build UUIDs manually.</p>
+      </div>
+      <div>
+        <strong>Is this UUID generator free?</strong>
+        <p style="margin:4px 0 0; color:var(--text-secondary);">Yes, completely free. No signup, no download, no limits. Generate as many UUIDs as you need.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- More Tools -->
+  <div class="section">
+    <h2>More Free Tools</h2>
+    <p style="font-size:14px; color:var(--text-secondary);">Browse other free online tools from TryTools — all run in your browser with no signup required.</p>
+    <div class="more-tools-grid">
+      <a href="/">&#x1F3E0; Back to All Tools</a>
+      <a href="/timestamp-converter/">&#x23F0; Timestamp Converter</a>
+      <a href="/json-formatter/">&#123; JSON Formatter</a>
+      <a href="/base64/">&#x1F4BE; Base64 Encoder</a>
+      <a href="/url-encoder/">&#x1F517; URL Encoder</a>
+      <a href="/color-converter/">&#x1F3A8; Color Converter</a>
+      <a href="/word-counter/">&#9997; Word Counter</a>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <p><strong>Privacy first:</strong> All UUIDs are generated in your browser. No data is ever uploaded to any server.</p>
+  <p>&copy; 2026 <a href="https://trytools.app">TryTools.app</a> &middot; <a href="/privacy/">Privacy</a> &middot; Free online tools, no signup required.</p>
+</footer>
+
+<script>
+'use strict';
+
+const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
+
+let quantity = 5;
+let upperCase = false;
+let noHyphens = false;
+
+// ── UUID v4 generation ─────────────────────────────────────
+function generateUUID() {
+  // Prefer native crypto.randomUUID()
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID();
+  }
+  // Fallback: crypto.getRandomValues
+  return generateUUIDv4Fallback();
+}
+
+function generateUUIDv4Fallback() {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  // Set version 4 (0100)
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  // Set variant (10xx)
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const hex = Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0,8)}-${hex.slice(8,12)}-${hex.slice(12,16)}-${hex.slice(16,20)}-${hex.slice(20,32)}`;
+}
+
+function generateBatch(n) {
+  const uuids = [];
+  for (let i = 0; i < n; i++) {
+    uuids.push(generateUUID());
+  }
+  return uuids;
+}
+
+// ── Formatting ─────────────────────────────────────────────
+function formatUUID(uuid) {
+  let result = uuid;
+  if (noHyphens) result = result.replace(/-/g, '');
+  if (upperCase) result = result.toUpperCase();
+  else result = result.toLowerCase();
+  return result;
+}
+
+// ── Generate & render ──────────────────────────────────────
+function doGenerate() {
+  const uuids = generateBatch(quantity);
+  const formatted = uuids.map(formatUUID);
+
+  const list = $('#uuidList');
+  list.innerHTML = formatted.map((u, i) =>
+    `<div class="uuid-item">
+      <span class="index">${i + 1}.</span>
+      <span class="value">${u}</span>
+      <button class="copy-btn" data-uuid="${u.replace(/'/g, "&#39;").replace(/"/g, '&quot;')}" onclick="copyOne(this)">Copy</button>
+    </div>`
+  ).join('');
+
+  $('#resultTitle').textContent = `Generated UUIDs (${formatted.length})`;
+  $('#copyAllBtn').style.display = 'inline-flex';
+}
+
+// ── Copy ───────────────────────────────────────────────────
+function copyOne(btn) {
+  const uuid = btn.getAttribute('data-uuid');
+  if (!uuid) return;
+  copyToClipboard(uuid, () => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1500);
+  });
+}
+
+function copyAll() {
+  const values = Array.from($$('.uuid-item .value'), el => el.textContent);
+  const text = values.join('\n');
+  copyToClipboard(text, () => {
+    const btn = $('#copyAllBtn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('success');
+    setTimeout(() => { btn.textContent = '📋 Copy All'; btn.classList.remove('success'); }, 1500);
+  });
+}
+
+function copyToClipboard(text, onSuccess) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
+  } else {
+    fallbackCopy(text, onSuccess);
+  }
+}
+
+function fallbackCopy(text, onSuccess) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); onSuccess(); } catch (e) {}
+  document.body.removeChild(ta);
+}
+
+// ── Controls ───────────────────────────────────────────────
+// Quantity buttons
+$$('#qtyBtns .qty-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    $$('#qtyBtns .qty-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    quantity = parseInt(this.getAttribute('data-n'));
+    doGenerate();
+  });
+});
+
+// Case toggle
+$$('#caseToggle .toggle-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    $$('#caseToggle .toggle-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    upperCase = this.getAttribute('data-v') === 'upper';
+    doGenerate();
+  });
+});
+
+// Hyphen toggle
+$$('#hyphenToggle .toggle-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    $$('#hyphenToggle .toggle-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    noHyphens = this.getAttribute('data-v') === 'no';
+    doGenerate();
+  });
+});
+
+// Keyboard shortcut
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    doGenerate();
+  }
+});
+
+// ── Initialize ─────────────────────────────────────────────
+doGenerate();
+</script>
+
+</body>
+</html>

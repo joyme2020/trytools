@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base64 Encoder & Decoder - Encode Decode Base64 Online | Free Tool</title>
+<meta name="description" content="Free online Base64 encoder and decoder. Encode text or files to Base64, decode Base64 strings back to text. Handles Unicode, URL-safe Base64, and data URLs. All processing in your browser — no uploads.">
+<meta name="keywords" content="base64 encoder, base64 decoder, base64 encode decode, base64 converter, base64 online, file to base64">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://trytools.app/base64/">
+<meta property="og:title" content="Free Online Base64 Encoder & Decoder">
+<meta property="og:description" content="Encode text or files to Base64, decode Base64 strings back to readable text. Free, instant, no signup.">
+<meta property="og:url" content="https://trytools.app/base64/">
+<meta property="og:site_name" content="TryTools">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Free Online Base64 Encoder & Decoder">
+<meta name="twitter:description" content="Encode text or files to Base64, decode Base64 strings back to readable text. Handles Unicode and URL-safe Base64.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Base64 Encoder & Decoder",
+  "url": "https://trytools.app/base64/",
+  "description": "Free online Base64 encoder and decoder. All processing happens in your browser.",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "All"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://trytools.app/"},
+    {"@type": "ListItem", "position": 2, "name": "Base64 Encoder", "item": "https://trytools.app/base64/"}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to Encode and Decode Base64",
+  "step": [
+    {"@type": "HowToStep", "position": 1, "text": "Type or paste your text in the input box. For encoding, enter plain text. For decoding, enter a Base64 string."},
+    {"@type": "HowToStep", "position": 2, "text": "The tool auto-detects whether your input is Base64 or plain text. You can also switch modes manually with the Encode/Decode tabs."},
+    {"@type": "HowToStep", "position": 3, "text": "For encoding files, click Upload File to convert any file (image, PDF, etc.) to Base64."},
+    {"@type": "HowToStep", "position": 4, "text": "Click Copy to copy the result, Download to save encoded output, or Swap to flip input and output."}
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is Base64 encoding?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Base64 is a binary-to-text encoding scheme that represents binary data as a string of 64 ASCII characters (A-Z, a-z, 0-9, +, /). It is commonly used to transmit binary data over text-based protocols like email (MIME), JSON, XML, and HTML. Base64 encoded data is about 33% larger than the original binary data."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can this tool handle Unicode text like Chinese or emoji?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. The tool uses UTF-8 encoding internally, so it correctly handles Chinese, Japanese, Korean, Arabic, emoji, and any other Unicode characters. Many simple Base64 tools fail with non-Latin text because they use btoa() directly — this tool properly encodes to UTF-8 bytes first."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is URL-safe Base64?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "URL-safe Base64 replaces '+' with '-' and '/' with '_', and omits the '=' padding. This makes Base64 strings safe for use in URLs and filenames without percent-encoding. This tool automatically detects and decodes URL-safe Base64."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my data safe when using this tool?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. All encoding and decoding happens entirely in your browser using JavaScript. Your text and files are never uploaded to any server, logged, or stored anywhere. This is especially important when encoding sensitive files or proprietary data."
+      }
+    }
+  ]
+}
+</script>
+<style>
+:root {
+  --bg: #fafafa;
+  --surface: #fff;
+  --border: #e5e7eb;
+  --text: #1f2937;
+  --text-secondary: #6b7280;
+  --accent: #6366f1;
+  --accent-hover: #4f46e5;
+  --success: #10b981;
+  --error: #ef4444;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+header {
+  text-align: center;
+  padding: 48px 20px 32px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+}
+
+header h1 {
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin-bottom: 8px;
+}
+
+header p {
+  font-size: 16px;
+  opacity: .85;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+
+.breadcrumb {
+  padding: 12px 20px;
+  font-size: 14px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+}
+.breadcrumb a { color: var(--accent); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb span { color: var(--text-secondary); }
+
+/* Mode tabs */
+.mode-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+
+.mode-tab {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all .15s;
+}
+.mode-tab:first-child { border-radius: var(--radius) 0 0 0; }
+.mode-tab:last-child { border-radius: 0 var(--radius) 0 0; }
+.mode-tab + .mode-tab { margin-left: -1px; }
+.mode-tab:hover { color: var(--text); }
+.mode-tab.active {
+  background: var(--surface);
+  color: var(--accent);
+  border-bottom-color: var(--surface);
+  font-weight: 600;
+}
+
+/* Editor section */
+.editor-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 0 var(--radius) var(--radius) var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin: 0 0 20px;
+}
+
+.editor-section h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stats {
+  font-size: 12px;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+textarea {
+  width: 100%;
+  min-height: 180px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  resize: vertical;
+  background: #f8f9fb;
+  color: var(--text);
+  transition: border-color .15s, box-shadow .15s;
+}
+
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99,102,241,.12);
+}
+
+textarea.error-state {
+  border-color: var(--error);
+  box-shadow: 0 0 0 3px rgba(239,68,68,.12);
+}
+
+/* Error / success */
+.error-msg {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #991b1b;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  display: none;
+}
+.error-msg.visible { display: block; }
+
+.success-msg {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  color: #065f46;
+  font-size: 13px;
+  display: none;
+}
+.success-msg.visible { display: block; }
+
+/* Toolbar */
+.btn {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent); }
+.btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn.primary:hover { background: var(--accent-hover); }
+.btn.success { background: var(--success); color: #fff; border-color: var(--success); }
+
+/* File upload */
+.file-upload-wrap {
+  position: relative;
+  display: inline-flex;
+}
+.file-upload-wrap input[type=file] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* Output area */
+.output-section {
+  margin-top: 16px;
+}
+
+.output-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.output-header span { font-size: 14px; font-weight: 500; color: var(--text-secondary); }
+
+.output-area {
+  width: 100%;
+  min-height: 120px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: var(--text);
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+/* Diff stats */
+.diff-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* Ad slot */
+.ad-slot { text-align: center; padding: 24px 0; }
+.ad-placeholder {
+  background: #f3f4f6;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* SEO sections */
+.section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.section h2 { font-size: 18px; font-weight: 600; margin-bottom: 12px; }
+.section h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+.section p, .section li { color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+.section ol, .section ul { padding-left: 20px; display: grid; gap: 6px; }
+.section code {
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+/* More tools */
+.more-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.more-tools-grid a, .more-tools-grid span {
+  padding: 12px;
+  background: var(--bg);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
+  font-size: 14px;
+}
+.more-tools-grid span { color: var(--text-secondary); }
+
+footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .editor-section { padding: 16px; }
+  .section { padding: 20px 16px; }
+  textarea { min-height: 150px; font-size: 12px; }
+  .output-area { font-size: 12px; }
+  .mode-tab { padding: 8px 16px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="https://trytools.app/">Home</a> <span>&rsaquo;</span> Base64 Encoder
+</nav>
+
+<header>
+  <h1>Base64 Encoder &amp; Decoder</h1>
+  <p>Encode text or files to Base64, decode Base64 strings back to text. Free, instant, no signup.</p>
+</header>
+
+<main>
+<div class="container">
+
+  <!-- Ad Slot Top -->
+  <div class="ad-slot">
+    <div class="ad-placeholder" id="ad-top">ADSENSE_SLOT_TOP</div>
+  </div>
+
+  <!-- Mode Tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tabEncode" onclick="setMode('encode')">&#x1F4E4; Encode</button>
+    <button class="mode-tab" id="tabDecode" onclick="setMode('decode')">&#x1F4E5; Decode</button>
+  </div>
+
+  <!-- Main Editor -->
+  <div class="editor-section">
+    <h2>
+      <span id="inputLabel">Text to Encode</span>
+      <span class="stats" id="inputStats">0 chars</span>
+    </h2>
+    <textarea id="inputArea" placeholder="Type or paste text here..." autofocus></textarea>
+    <noscript>
+      <div style="margin-top:10px;padding:14px;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;font-size:14px;color:#92400e;font-family:sans-serif;">
+        <strong>Base64 Encoder &amp; Decoder — Free Online Tool</strong><br>
+        This tool encodes text and files to Base64, and decodes Base64 strings back to readable text.
+        Supports proper UTF-8 Unicode (Chinese, Japanese, emoji), URL-safe Base64, data URLs, and file upload.
+        Paste your text or Base64 string, and the tool auto-detects whether to encode or decode.
+        All processing happens in your browser — your data never leaves your device.
+        Enable JavaScript to use the interactive tool.
+      </div>
+    </noscript>
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="success-msg" id="successMsg"></div>
+
+    <div class="output-section" id="outputSection">
+      <div class="output-header">
+        <span id="outputLabel">Encoded Output</span>
+        <span class="stats" id="outputStats"></span>
+      </div>
+      <div class="output-area" id="outputArea"></div>
+      <div class="diff-stats" id="diffStats"></div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:24px;">
+    <button class="btn primary" id="convertBtn" onclick="doConvert()">&#x27F3; Encode</button>
+    <button class="btn" id="copyBtn" onclick="doCopy()">&#x1F4CB; Copy</button>
+    <button class="btn" onclick="doSwap()">&#x21C4; Swap</button>
+    <button class="btn" onclick="doClear()">&#x1F5D1; Clear</button>
+    <div class="file-upload-wrap" id="fileUploadWrap">
+      <button class="btn">&#x1F4C1; Upload File</button>
+      <input type="file" id="fileInput" onchange="handleFile(this)">
+    </div>
+  </div>
+
+  <!-- Ad Slot Middle -->
+  <div class="ad-slot">
+    <div class="ad-placeholder" id="ad-middle">ADSENSE_SLOT_MIDDLE</div>
+  </div>
+
+  <!-- SEO Content -->
+  <div class="section">
+    <h2>How to Use This Base64 Encoder</h2>
+    <ol>
+      <li><strong>Choose Encode or Decode</strong> — Use the tabs above to switch modes. The tool also auto-detects: if your input looks like Base64, it switches to Decode automatically.</li>
+      <li><strong>Enter your text</strong> — <strong>Encode mode:</strong> type or paste any text (Unicode, emoji, etc.). <strong>Decode mode:</strong> paste a Base64 string.</li>
+      <li><strong>For files, click Upload File</strong> — In Encode mode, upload any file (image, PDF, etc.) to convert it to a Base64 data URL. The encoded string can be embedded directly in HTML, CSS, or JSON.</li>
+      <li><strong>Copy, Swap, or Clear</strong> — Click <strong>Copy</strong> to copy the result, <strong>Swap</strong> to flip input and output (useful for round-trip testing), or <strong>Clear</strong> to reset.</li>
+    </ol>
+    <p style="margin-top:12px;">Tip: Use <kbd>Ctrl + Enter</kbd> to trigger encode/decode, or <kbd>Ctrl + ,</kbd> to swap input/output.</p>
+  </div>
+
+  <div class="section">
+    <h2>Why Use This Base64 Encoder?</h2>
+    <div style="display:grid; gap:16px; margin-top:8px;">
+      <div>
+        <h3>Proper Unicode support</h3>
+        <p>Many Base64 tools fail with non-Latin text because they use JavaScript's <code>btoa()</code> directly, which only handles Latin-1 characters. This tool properly encodes to UTF-8 bytes first, so Chinese, Japanese, Korean, Arabic, and emoji characters work correctly.</p>
+      </div>
+      <div>
+        <h3>Complete privacy</h3>
+        <p>All processing happens in your browser. Your text and files never leave your device — no uploads, no server logs, no tracking. Safe for sensitive data, API keys, and proprietary documents.</p>
+      </div>
+      <div>
+        <h3>File to Base64 conversion</h3>
+        <p>Upload any file to encode it as a Base64 data URL. The output includes the MIME type and can be embedded directly in HTML <code>&lt;img&gt;</code> tags, CSS <code>url()</code> values, or JSON payloads.</p>
+      </div>
+      <div>
+        <h3>Auto-detect and URL-safe support</h3>
+        <p>The tool detects whether your input is plain text, standard Base64, or URL-safe Base64 (using <code>-</code> and <code>_</code> instead of <code>+</code> and <code>/</code>), and handles each case automatically.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Frequently Asked Questions</h2>
+    <div style="display:grid; gap:16px; margin-top:8px;">
+      <div>
+        <strong>What is Base64 encoding used for?</strong>
+        <p style="margin:4px 0 0; color:var(--text-secondary);">Base64 is used to represent binary data as ASCII text. Common uses include: embedding images in HTML/CSS with data URLs, sending attachments in email (MIME), storing binary data in JSON or XML, encoding credentials in HTTP Basic Auth headers, and transmitting binary data through text-only channels.</p>
+      </div>
+      <div>
+        <strong>Why does Base64 make data 33% larger?</strong>
+        <p style="margin:4px 0 0; color:var(--text-secondary);">Base64 uses 64 characters (6 bits each) to represent data that originally uses 8 bits per byte. Every 3 original bytes become 4 Base64 characters: 3 × 8 = 24 bits → 4 × 6 = 24 bits. The 4/3 ratio means ~33.3% size increase.</p>
+      </div>
+      <div>
+        <strong>Can I decode Base64 back to the original text?</strong>
+        <p style="margin:4px 0 0; color:var(--text-secondary);">Yes. The encoding is fully reversible. Switch to Decode mode, paste your Base64 string, and the original text is restored. This tool uses UTF-8 for text encoding, so any Unicode text round-trips perfectly.</p>
+      </div>
+      <div>
+        <strong>What is the difference between standard and URL-safe Base64?</strong>
+        <p style="margin:4px 0 0; color:var(--text-secondary);">Standard Base64 uses <code>+</code>, <code>/</code>, and <code>=</code> padding. URL-safe Base64 (RFC 4648 §5) replaces <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code>, and often omits padding. This makes it safe for URLs and filenames without percent-encoding.</p>
+      </div>
+      <div>
+        <strong>Is this Base64 tool free?</strong>
+        <p style="margin:4px 0 0; color:var(--text-secondary);">Yes, completely free. No signup, no download, no limits on usage.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- More Tools -->
+  <div class="section">
+    <h2>More Free Tools</h2>
+    <p style="font-size:14px; color:var(--text-secondary);">Browse other free online tools from TryTools — all run in your browser with no signup required.</p>
+    <div class="more-tools-grid">
+      <a href="/">&#x1F3E0; Back to All Tools</a>
+      <a href="/timestamp-converter/">&#x23F0; Timestamp Converter</a>
+      <a href="/json-formatter/">&#123; JSON Formatter</a>
+      <a href="/url-encoder/">&#x1F517; URL Encoder</a>
+      <a href="/uuid-generator/">&#x1F380; UUID Generator</a>
+      <a href="/color-converter/">&#x1F3A8; Color Converter</a>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<footer>
+  <p><strong>Privacy first:</strong> All processing happens in your browser. No data is ever uploaded to any server.</p>
+  <p>&copy; 2026 <a href="https://trytools.app">TryTools.app</a> &middot; <a href="/privacy/">Privacy</a> &middot; Free online tools, no signup required.</p>
+</footer>
+
+<script>
+'use strict';
+
+const $ = (sel) => document.querySelector(sel);
+
+let mode = 'encode';
+let currentOutput = '';
+
+// ── Mode switching ──────────────────────────────────────────
+function setMode(m) {
+  if (mode === m) return;
+  mode = m;
+  $('#tabEncode').classList.toggle('active', m === 'encode');
+  $('#tabDecode').classList.toggle('active', m === 'decode');
+  $('#inputLabel').textContent = m === 'encode' ? 'Text to Encode' : 'Base64 to Decode';
+  $('#outputLabel').textContent = m === 'encode' ? 'Encoded Output' : 'Decoded Output';
+  $('#convertBtn').innerHTML = m === 'encode' ? '&#x27F3; Encode' : '&#x27F3; Decode';
+  $('#inputArea').placeholder = m === 'encode'
+    ? 'Type or paste text here...'
+    : 'Paste Base64 string here...';
+  $('#fileUploadWrap').style.display = m === 'encode' ? '' : 'none';
+  clearMessages();
+  if ($('#inputArea').value.trim()) doConvert();
+}
+
+// ── Core: string ↔ Uint8Array ──────────────────────────────
+function stringToBytes(str) {
+  return new TextEncoder().encode(str);
+}
+
+function bytesToString(bytes) {
+  return new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+}
+
+// ── Core: bytes ↔ Base64 ────────────────────────────────────
+function bytesToBase64(bytes) {
+  // Convert Uint8Array → binary string → btoa
+  const len = bytes.length;
+  let binary = '';
+  // Process in chunks to avoid "Maximum call stack size exceeded"
+  const CHUNK = 0x8000; // 32k
+  for (let i = 0; i < len; i += CHUNK) {
+    binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + CHUNK, len)));
+  }
+  return btoa(binary);
+}
+
+function base64ToBytes(b64) {
+  const binary = atob(b64);
+  const len = binary.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  return bytes;
+}
+
+// ── Sanitize Base64 input ──────────────────────────────────
+function sanitizeBase64(raw) {
+  // Strip whitespace, newlines, data URL prefix
+  let s = raw.trim().replace(/\s+/g, '');
+  // Handle data URLs: data:[<mediatype>][;base64],<data>
+  const dataUrlMatch = s.match(/^data:([^;,]*)?(?:;base64)?,([\s\S]*)$/i);
+  if (dataUrlMatch) {
+    s = dataUrlMatch[2].trim();
+  }
+  // Convert URL-safe Base64 to standard
+  s = s.replace(/-/g, '+').replace(/_/g, '/');
+  // Restore padding if needed
+  while (s.length % 4 !== 0) s += '=';
+  return s;
+}
+
+function isValidBase64(s) {
+  return /^[A-Za-z0-9+/]*={0,2}$/.test(s);
+}
+
+// ── Encode / Decode ────────────────────────────────────────
+function doEncode(raw) {
+  const bytes = stringToBytes(raw);
+  const encoded = bytesToBase64(bytes);
+  currentOutput = encoded;
+  showOutput(encoded, 'Encoded Output', raw.length, encoded.length);
+  showSuccess(null);
+}
+
+function doDecode(raw) {
+  const sanitized = sanitizeBase64(raw);
+  if (!sanitized) {
+    showError('Input is empty after sanitizing. Please provide a valid Base64 string.');
+    return;
+  }
+  if (!isValidBase64(sanitized)) {
+    // Find the first invalid character
+    const invalidIdx = sanitized.search(/[^A-Za-z0-9+/=]/);
+    const ch = invalidIdx >= 0 ? sanitized[invalidIdx] : '';
+    showError(`Invalid Base64 character "${ch}" at position ${invalidIdx}. Only A-Z, a-z, 0-9, +, /, and = are allowed.`);
+    return;
+  }
+  if (sanitized.length % 4 !== 0) {
+    showError(`Invalid Base64 length: ${sanitized.length} characters. Valid Base64 length must be a multiple of 4.`);
+    return;
+  }
+
+  let bytes;
+  try {
+    bytes = base64ToBytes(sanitized);
+  } catch (e) {
+    showError(`Failed to decode: ${e.message}. The Base64 string may be malformed.`);
+    return;
+  }
+
+  try {
+    const decoded = bytesToString(bytes);
+    currentOutput = decoded;
+    showOutput(decoded, 'Decoded Output', raw.length, decoded.length);
+    showSuccess(null);
+  } catch (e) {
+    // UTF-8 decoding failed — the Base64 decodes to non-text binary data
+    const hexPreview = Array.from(bytes.subarray(0, 32))
+      .map(b => b.toString(16).padStart(2, '0')).join(' ');
+    const more = bytes.length > 32 ? '...' : '';
+    showError(
+      `Decoded data is not valid UTF-8 text (it may be a binary file).\n` +
+      `First ${Math.min(32, bytes.length)} bytes (hex): ${hexPreview}${more}\n` +
+      `Total decoded size: ${bytes.length} bytes. Try decoding a text-based Base64 string instead.`
+    );
+  }
+}
+
+// ── Auto-detect mode ───────────────────────────────────────
+function autoDetect(raw) {
+  if (!raw.trim()) return;
+  const cleaned = raw.trim().replace(/\s+/g, '');
+  // Strip data URL prefix and convert URL-safe chars for analysis
+  const stripped = cleaned.replace(/^data:[^;,]*;base64,/i, '').replace(/-/g, '+').replace(/_/g, '/');
+  // Must match Base64 character set
+  if (!/^[A-Za-z0-9+/]*={0,2}$/.test(stripped)) return;
+  // Confidence signal: contains + or /, or is long enough with mixed case + digits
+  const confident = /[+/]/.test(stripped) ||
+    (stripped.length >= 8 && /[A-Z]/.test(stripped) && /[a-z]/.test(stripped) && /\d/.test(stripped));
+  if (confident && mode !== 'decode') setMode('decode');
+}
+
+// ── Convert (main entry) ───────────────────────────────────
+let convertTimer;
+function scheduleConvert() {
+  clearTimeout(convertTimer);
+  convertTimer = setTimeout(doConvert, 400);
+}
+
+function doConvert() {
+  clearMessages();
+  const raw = $('#inputArea').value;
+  if (!raw.trim()) {
+    hideOutput();
+    return;
+  }
+
+  if (mode === 'encode') {
+    doEncode(raw);
+  } else {
+    doDecode(raw);
+  }
+}
+
+// ── File upload ────────────────────────────────────────────
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function() {
+    // data URL from FileReader includes prefix like "data:image/png;base64,..."
+    // For binary files, extract just the Base64 part
+    const dataUrl = reader.result;
+    if (mode !== 'encode') setMode('encode');
+
+    // Show the full data URL in input so user knows MIME type
+    $('#inputArea').value = dataUrl;
+    updateInputStats();
+
+    currentOutput = dataUrl;
+    showOutput(dataUrl, 'Base64 Data URL', file.size, dataUrl.length);
+    showSuccess(`File "${file.name}" (${formatSize(file.size)}) encoded successfully.`);
+  };
+
+  reader.onerror = function() {
+    showError(`Failed to read file "${file.name}". Please try again.`);
+  };
+
+  reader.readAsDataURL(file);
+  // Reset file input so same file can be re-selected
+  input.value = '';
+}
+
+// ── Output display ─────────────────────────────────────────
+function showOutput(text, label, inputLen, outputLen) {
+  $('#outputArea').textContent = text;
+  $('#outputLabel').textContent = label;
+  const lines = text.split('\n').length;
+  const chars = text.length;
+  $('#outputStats').textContent = `${lines} lines · ${chars} chars`;
+  $('#outputSection').style.display = 'block';
+
+  if (inputLen !== undefined && outputLen !== undefined) {
+    const diff = outputLen - inputLen;
+    const pct = inputLen ? ((Math.abs(diff) / inputLen) * 100).toFixed(1) : 0;
+    let diffText;
+    if (diff > 0) diffText = `+${diff} chars (+${pct}% larger) — Base64 encoding expands data`;
+    else if (diff < 0) diffText = `${diff} chars (${-pct}% smaller) — decoded back to original`;
+    else diffText = 'No size change';
+    $('#diffStats').innerHTML = `<span>&#x1F4CF; Original: ${inputLen} chars</span><span>&#x27A1; Output: ${outputLen} chars</span><span>${diffText}</span>`;
+  }
+}
+
+function hideOutput() {
+  $('#outputSection').style.display = 'none';
+  currentOutput = '';
+  $('#diffStats').innerHTML = '';
+}
+
+function showError(msg) {
+  $('#errorMsg').textContent = msg;
+  $('#errorMsg').classList.add('visible');
+  $('#inputArea').classList.add('error-state');
+}
+
+function showSuccess(msg) {
+  if (msg) {
+    $('#successMsg').textContent = msg;
+    $('#successMsg').classList.add('visible');
+  }
+}
+
+function clearMessages() {
+  $('#errorMsg').classList.remove('visible');
+  $('#errorMsg').textContent = '';
+  $('#successMsg').classList.remove('visible');
+  $('#successMsg').textContent = '';
+  $('#inputArea').classList.remove('error-state');
+}
+
+// ── Copy / Swap / Clear ────────────────────────────────────
+function doCopy() {
+  if (!currentOutput) { doConvert(); if (!currentOutput) return; }
+  if (!navigator.clipboard) { fallbackCopy(currentOutput); return; }
+  navigator.clipboard.writeText(currentOutput).then(
+    () => flashCopyBtn()
+  ).catch(() => fallbackCopy(currentOutput));
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.cssText = 'position:fixed;opacity:0;';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+  flashCopyBtn();
+}
+
+function flashCopyBtn() {
+  const btn = $('#copyBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  btn.classList.add('success');
+  setTimeout(() => { btn.textContent = orig; btn.classList.remove('success'); }, 1500);
+}
+
+function doSwap() {
+  if (!currentOutput) { doConvert(); if (!currentOutput) return; }
+  $('#inputArea').value = currentOutput;
+  updateInputStats();
+  setMode(mode === 'encode' ? 'decode' : 'encode');
+  // After swap, convert immediately
+  setTimeout(doConvert, 100);
+}
+
+function doClear() {
+  $('#inputArea').value = '';
+  hideOutput();
+  currentOutput = '';
+  clearMessages();
+  updateInputStats();
+}
+
+// ── Input stats ────────────────────────────────────────────
+function updateInputStats() {
+  const raw = $('#inputArea').value;
+  const lines = raw ? (raw.match(/\n/g) || []).length + 1 : 0;
+  const chars = raw.length;
+  $('#inputStats').textContent = `${lines} lines · ${chars} chars`;
+}
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+// ── Event listeners ────────────────────────────────────────
+$('#inputArea').addEventListener('input', () => {
+  updateInputStats();
+  const raw = $('#inputArea').value;
+  if (raw.trim()) {
+    autoDetect(raw);
+  }
+  scheduleConvert();
+});
+
+$('#inputArea').addEventListener('paste', () => {
+  setTimeout(() => {
+    updateInputStats();
+    autoDetect($('#inputArea').value);
+    doConvert();
+  }, 50);
+});
+
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    e.preventDefault();
+    doConvert();
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === ',') {
+    e.preventDefault();
+    doSwap();
+  }
+});
+
+// ── Initialize ─────────────────────────────────────────────
+updateInputStats();
+</script>
+
+</body>
+</html>
