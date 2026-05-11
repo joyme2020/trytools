@@ -424,6 +424,11 @@ footer a:hover { text-decoration: underline; }
 [data-theme="dark"] code { background: #334155; }
 [data-theme="dark"] header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
 [data-theme="dark"] .breadcrumb { background: var(--bg); border-color: var(--border); }
+
+.related-bar { text-align:center; padding:0 0 24px; display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; }
+.related-bar .related-label { font-size:13px; color:var(--text-secondary); }
+.related-bar a { display:inline-flex; align-items:center; gap:4px; padding:6px 14px; background:var(--surface); border:1px solid var(--border); border-radius:20px; text-decoration:none; font-size:13px; color:var(--text); transition:all .15s; }
+.related-bar a:hover { border-color:var(--accent); color:var(--accent); }
 </style>
 </head>
 <body>
@@ -492,6 +497,8 @@ footer a:hover { text-decoration: underline; }
       <input type="file" id="fileInput" onchange="handleFile(this)">
     </div>
   </div>
+
+  <div class="related-bar"><span class="related-label">Related:</span><a href="/json-formatter/">{ JSON Formatter</a><a href="/url-encoder/">🔗 URL Encoder</a></div>
 
   <!-- Ad Slot Middle -->
   <div class="ad-slot">

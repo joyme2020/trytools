@@ -207,6 +207,11 @@ footer a:hover { text-decoration:underline; }
 [data-theme="dark"] code { background: #334155; }
 [data-theme="dark"] header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
 [data-theme="dark"] .breadcrumb { background: var(--bg); border-color: var(--border); }
+
+.related-bar { text-align:center; padding:0 0 24px; display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap; }
+.related-bar .related-label { font-size:13px; color:var(--text-secondary); }
+.related-bar a { display:inline-flex; align-items:center; gap:4px; padding:6px 14px; background:var(--surface); border:1px solid var(--border); border-radius:20px; text-decoration:none; font-size:13px; color:var(--text); transition:all .15s; }
+.related-bar a:hover { border-color:var(--accent); color:var(--accent); }
 </style>
 </head>
 <body>
@@ -284,7 +289,8 @@ footer a:hover { text-decoration:underline; }
     <div class="output-area" id="outputArea"></div>
   </div>
 
-  <div class="ad-slot"><div class="ad-placeholder" id="ad-middle">ADSENSE_SLOT_MIDDLE</div></div>
+  <div class="ad-slot"><div class="ad-placeholder" <div class="related-bar"><span class="related-label">Related:</span><a href="/json-formatter/">{ JSON Formatter</a><a href="/base64/">💾 Base64 Encoder</a></div>
+    id="ad-middle">ADSENSE_SLOT_MIDDLE</div></div>
 
   <!-- SEO Content -->
   <div class="section">
