@@ -125,7 +125,7 @@ The other 6 tools (Base64, URL, UUID, Color, Word Counter, Case Converter) follo
 | 字段 | 内容 |
 |------|------|
 | **Product Name** | TryTools |
-| **Tagline** | 9 free browser-side developer tools — no tracking, no uploads |
+| **Tagline** | Free browser-side developer tools — no tracking, no uploads |
 | **URL** | https://trytools.app |
 | **GitHub** | https://github.com/joyme2020/trytools |
 | **Category** | Developer Tools |
@@ -133,7 +133,7 @@ The other 6 tools (Base64, URL, UUID, Color, Word Counter, Case Converter) follo
 
 ### 产品描述（260 字符限制）
 
-TryTools is a collection of 9 developer tools that run entirely in your browser. Timestamp converter, JSON formatter, Base64 encoder, URL encoder, UUID generator, color converter, word counter, case converter, and table generator. No data ever leaves your device.
+TryTools is a collection of developer tools that run entirely in your browser. Timestamp converter, JSON formatter, Base64 encoder, URL encoder, UUID generator, color converter, word counter, case converter, and table generator. No data ever leaves your device.
 
 ### Maker's Comment（发布后第一条评论）
 
